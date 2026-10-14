@@ -20,7 +20,7 @@ services:
     ports:
       - "8025:8025" # web interface
       - "1025:1025" # SMTP
-  
+
   api:
     build: ./api
     ports:
@@ -34,6 +34,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fs", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 300s
 
   web:
     build: ./web
@@ -48,6 +54,12 @@ services:
       - web_next:/app/.next
     depends_on:
       - api
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 300s
 
 volumes:
   db_data:
