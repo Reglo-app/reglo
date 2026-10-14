@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-reglo}
+      POSTGRES_USER: ${POSTGRES_USER:-reglo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-reglo}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-reglo} -d ${POSTGRES_DB:-reglo}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailpit:
+    image: axllent/mailpit:latest
+    ports:
+      - "8025:8025" # web interface
+      - "1025:1025" # SMTP
+
+volumes:
+  db_data:
