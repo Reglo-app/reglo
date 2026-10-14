@@ -1,0 +1,37 @@
+name: CI API
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+jobs:
+  api:
+    name: API checks
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: intl, pdo_pgsql, zip
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: PHP-CS-Fixer
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit
+        env:
+          APP_ENV: test
