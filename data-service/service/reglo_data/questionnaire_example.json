@@ -1,0 +1,71 @@
+{
+  "_avertissement": "Questionnaire FICTIF de démonstration et de test. Le contenu réel (questions, pondérations, barème) est à produire avec l'expertise QHSE / Business de l'équipe.",
+  "version": "exemple-1",
+  "proof_cap": 50,
+  "pillars": [
+    {
+      "id": "social", "label": "Social", "weight": 1,
+      "themes": [
+        {
+          "id": "sante_securite", "label": "Santé et sécurité au travail", "weight": 2,
+          "questions": [
+            {"id": "S1", "label": "Le document unique d'évaluation des risques (DUERP) est-il à jour ?", "type": "yes_no", "weight": 3, "requires_proof": true},
+            {"id": "S2", "label": "Les accidents et presque-accidents sont-ils analysés ?", "type": "scale", "levels": ["Jamais", "Parfois", "Souvent", "Systématiquement"], "weight": 2},
+            {"id": "S3", "label": "Les risques psychosociaux sont-ils évalués ?", "type": "yes_no", "weight": 1}
+          ]
+        },
+        {
+          "id": "competences", "label": "Formation et compétences", "weight": 1,
+          "questions": [
+            {"id": "S4", "label": "Part des salariés formés à la sécurité dans l'année", "type": "single_choice", "weight": 1,
+             "options": [{"id": "lt25", "points": 0}, {"id": "25_50", "points": 40}, {"id": "50_80", "points": 70}, {"id": "gt80", "points": 100}]}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "environnement", "label": "Environnement", "weight": 1,
+      "themes": [
+        {
+          "id": "carbone", "label": "Climat et énergie", "weight": 1,
+          "questions": [
+            {"id": "E1", "label": "Un bilan des émissions de gaz à effet de serre a-t-il été réalisé ?", "type": "yes_no", "weight": 2, "requires_proof": true},
+            {"id": "E2", "label": "Actions de réduction des consommations engagées", "type": "multi_choice", "weight": 1,
+             "options": [{"id": "eclairage", "points": 30}, {"id": "chauffage", "points": 40}, {"id": "mobilite", "points": 30}, {"id": "achats", "points": 30}]}
+          ]
+        },
+        {
+          "id": "dechets", "label": "Déchets", "weight": 1,
+          "questions": [
+            {"id": "E3", "label": "Le tri des déchets (dont biodéchets) est-il organisé ?", "type": "scale", "levels": ["Non", "Partiellement", "Oui, suivi"], "weight": 1, "allow_na": true}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ethique", "label": "Éthique", "weight": 1,
+      "themes": [
+        {
+          "id": "achats", "label": "Achats responsables", "weight": 1,
+          "questions": [
+            {"id": "H1", "label": "Des critères RSE sont-ils intégrés aux achats ?", "type": "scale", "levels": ["Aucun", "Ponctuels", "Formalisés"], "weight": 1, "allow_na": true},
+            {"id": "H2", "label": "Une charte éthique est-elle diffusée ?", "type": "yes_no", "weight": 1, "requires_proof": true}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gouvernance", "label": "Gouvernance", "weight": 1,
+      "themes": [
+        {
+          "id": "pilotage", "label": "Pilotage de la démarche", "weight": 1,
+          "questions": [
+            {"id": "G1", "label": "Un responsable RSE / QHSE est-il désigné ?", "type": "yes_no", "weight": 1},
+            {"id": "G2", "label": "Des objectifs RSE sont-ils suivis par la direction ?", "type": "scale", "levels": ["Non", "Annuellement", "Trimestriellement"], "weight": 2},
+            {"id": "G3", "label": "Commentaires libres sur la démarche", "type": "text", "mandatory": false}
+          ]
+        }
+      ]
+    }
+  ]
+}
