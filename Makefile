@@ -1,10 +1,15 @@
-.PHONY: help up down restart build ps logs test test-api test-web lint lint-api lint-web format-web api-shell web-shell
+.PHONY: help up down restart build ps logs test test-api test-web lint lint-api lint-web format-web api-shell web-shell status
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-12s %s\n", $$1, $$2}'
 
-up: ## Start all services
-	docker compose up -d
+up: ## Start all services and wait until they are ready
+	docker compose up -d --wait --wait-timeout 600
+	@echo ""
+	@echo "All services are ready:"
+	@echo "  Web:     http://localhost:3000"
+	@echo "  API:     http://localhost:8000/health"
+	@echo "  Mailpit: http://localhost:8025"
 
 down: ## Stop all services
 	docker compose down
@@ -17,6 +22,9 @@ build: ## Rebuild the images
 
 ps: ## List running services
 	docker compose ps
+
+status: ## Show the state of each service
+	docker compose ps --format "table {{.Service}}\t{{.Status}}"
 
 logs: ## Follow the logs
 	docker compose logs -f
