@@ -1,0 +1,14 @@
+# Python
+.pytest_cache/
+*.egg-info/
+
+# Local databases, logs and generated reports
+*.sqlite
+*.sqlite3
+*.log
+service/data/
+veille-marche/data/
+veille-marche/reports/
+
+# Streamlit secrets
+.streamlit/secrets.toml

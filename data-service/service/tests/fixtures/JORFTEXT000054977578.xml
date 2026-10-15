@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEXTE_VERSION>
+<META>
+<META_COMMUN>
+<ID>JORFTEXT000054977578</ID>
+<ID_ELI>https://www.legifrance.gouv.fr/eli/decret/2026/10/12/TRSS2616720D/jo/texte</ID_ELI>
+<ANCIEN_ID/>
+<ORIGINE>JORF</ORIGINE>
+<URL>texte/version/JORF/TEXT/00/00/54/97/75/JORFTEXT000054977578.xml</URL>
+<NATURE>DECRET</NATURE>
+</META_COMMUN>
+<META_SPEC>
+<META_TEXTE_CHRONICLE>
+<CID>JORFTEXT000054977578</CID>
+<NUM>2026-948</NUM>
+<NUM_PARUTION>0239</NUM_PARUTION>
+<NUM_SEQUENCE>1</NUM_SEQUENCE>
+<NOR>TRSS2616720D</NOR>
+<DATE_PUBLI>2026-10-13</DATE_PUBLI>
+<DATE_TEXTE>2026-10-12</DATE_TEXTE>
+<ORIGINE_PUBLI>JORF n°0239 du 13 octobre 2026</ORIGINE_PUBLI>
+<PAGE_DEB_PUBLI/>
+<PAGE_FIN_PUBLI/>
+
+</META_TEXTE_CHRONICLE>
+<META_TEXTE_VERSION>
+
+
+<TITRE>Décret n°2026-948 du 12 octobre 2026</TITRE>
+<TITREFULL>Décret n° 2026-948 du 12 octobre 2026 définissant les modalités d'application de la majoration de durée d'assurance pour l'exercice d'un mandat local</TITREFULL>
+
+
+<DATE_DEBUT/>
+<DATE_FIN/>
+<AUTORITE/>
+<MINISTERE>Ministère du travail et des solidarités</MINISTERE>
+<MCS_TXT/>
+
+
+<LIENS>
+<LIEN cidtexte="JORFTEXT000000611945" datesignatexte="2003-12-26" id="JORFTEXT000000611945" naturetexte="DECRET" nortexte="FPPA0300175D" num="" numtexte="2003-1306" sens="source" typelien="CITATION">Décret n°2003-1306 du 26 décembre 2003</LIEN>
+<LIEN cidtexte="JORFTEXT000000611945" datesignatexte="2003-12-26" id="LEGIARTI000006400876" naturetexte="DECRET" nortexte="FPPA0300175D" num="15" numtexte="2003-1306" sens="source" typelien="CITATION">Décret n°2003-1306 du 26 décembre 2003 - art. 15</LIEN>
+<LIEN cidtexte="JORFTEXT000000440905" datesignatexte="2004-10-05" id="JORFTEXT000000440905" naturetexte="DECRET" nortexte="ECOB0460009D" num="" numtexte="2004-1056" sens="source" typelien="CITATION">Décret n°2004-1056 du 5 octobre 2004</LIEN>
+<LIEN cidtexte="JORFTEXT000000440905" datesignatexte="2004-10-05" id="LEGIARTI000006781481" naturetexte="DECRET" nortexte="ECOB0460009D" num="12" numtexte="2004-1056" sens="source" typelien="CITATION">Décret n°2004-1056 du 5 octobre 2004 - art. 12</LIEN>
+<LIEN cidtexte="JORFTEXT000034676972" datesignatexte="2017-05-10" id="JORFTEXT000034676972" naturetexte="DECRET" nortexte="AFSS1712411D" num="" numtexte="2017-1000" sens="source" typelien="CITATION">Décret n°2017-1000 du 10 mai 2017</LIEN>
+<LIEN cidtexte="JORFTEXT000034676972" datesignatexte="2017-05-10" id="JORFARTI000034677054" naturetexte="DECRET" nortexte="AFSS1712411D" num="3" numtexte="2017-1000" sens="source" typelien="CITATION">Décret n°2017-1000 du 10 mai 2017 - art. 3</LIEN>
+<LIEN cidtexte="JORFTEXT000053142169" datesignatexte="2025-12-22" id="JORFARTI000053142188" naturetexte="LOI" nortexte="TECX2407140L" num="5" numtexte="2025-1249" sens="source" typelien="CITATION">LOI n°2025-1249 du 22 décembre 2025 - art. 5</LIEN>
+<LIEN cidtexte="LEGITEXT000006070239" datesignatexte="2999-01-01" id="LEGITEXT000006070239" naturetexte="CODE" nortexte="" num="" numtexte="" sens="source" typelien="CITATION">Code électoral</LIEN>
+<LIEN cidtexte="LEGITEXT000006070239" datesignatexte="2999-01-01" id="LEGIARTI000006353346" naturetexte="CODE" nortexte="" num="LO151" numtexte="" sens="source" typelien="CITATION">Code électoral - art. LO151</LIEN>
+<LIEN cidtexte="LEGITEXT000006070302" datesignatexte="2999-01-01" id="LEGIARTI000006362925" naturetexte="CODE" nortexte="" num="R26 bis" numtexte="" sens="source" typelien="CITATION">Code des pensions civiles et militaires de retr... - art. R26 bis</LIEN>
+<LIEN cidtexte="LEGITEXT000006070302" datesignatexte="2999-01-01" id="LEGITEXT000006070302" naturetexte="CODE" nortexte="" num="" numtexte="" sens="source" typelien="CITATION">Code des pensions civiles et militaires de retraite</LIEN>
+<LIEN cidtexte="LEGITEXT000006071367" datesignatexte="2999-01-01" id="LEGITEXT000006071367" naturetexte="CODE" nortexte="" num="" numtexte="" sens="source" typelien="CITATION">Code rural et de la pêche maritime</LIEN>
+<LIEN cidtexte="LEGITEXT000006071367" datesignatexte="2999-01-01" id="LEGIARTI000006597468" naturetexte="CODE" nortexte="" num="R732-61" numtexte="" sens="source" typelien="CITATION">Code rural et de la pêche maritime - art. R732-61</LIEN>
+<LIEN cidtexte="LEGITEXT000006073189" datesignatexte="2999-01-01" id="LEGITEXT000006073189" naturetexte="CODE" nortexte="" num="" numtexte="" sens="source" typelien="CITATION">Code de la sécurité sociale.</LIEN>
+<LIEN cidtexte="LEGITEXT000006073189" datesignatexte="2999-01-01" id="LEGIARTI000053146362" naturetexte="CODE" nortexte="" num="L161-21-2" numtexte="" sens="source" typelien="CITATION">Code de la sécurité sociale. - art. L161-21-2</LIEN>
+<LIEN cidtexte="LEGITEXT000006073189" datesignatexte="2999-01-01" id="LEGIARTI000006747882" naturetexte="CODE" nortexte="" num="R173-15" numtexte="" sens="source" typelien="CITATION">Code de la sécurité sociale. - art. R173-15</LIEN>
+<LIEN cidtexte="LEGITEXT000006074066" datesignatexte="2999-01-01" id="LEGIARTI000053389645" naturetexte="CODE" nortexte="" num="R8-1" numtexte="" sens="source" typelien="CITATION">Code des pensions de retraite des marins frança... - art. R8-1</LIEN>
+<LIEN cidtexte="LEGITEXT000006074066" datesignatexte="2999-01-01" id="LEGITEXT000006074066" naturetexte="CODE" nortexte="" num="" numtexte="" sens="source" typelien="CITATION">Code des pensions de retraite des marins français du commerce, de pêche ou de plaisance</LIEN>
+</LIENS>
+
+</META_TEXTE_VERSION>
+</META_SPEC>
+</META>
+
+<NOTICE>
+<CONTENU>
+  <p align="left">
+    <br/>Publics concernés : anciens élus locaux demandant l'entrée en jouissance d'une pension de retraite de base.
+    <br/>Objet : le décret définit les modalités d'application de la majoration de durée d'assurance instituée au bénéfice des anciens élus locaux ayant exercé une fonction au sein d'un organe exécutif.
+    <br/>Entrée en vigueur : le texte entre en vigueur le lendemain de sa publication, dans les conditions précisées à son article 8.
+    <br/>Application : le présent décret est pris en application de l'article 5 de la loi n° 2025-1249 du 22 décembre 2025 portant création d'un statut de l'élu local.
+  </p>
+</CONTENU>
+</NOTICE>
+<VISAS>
+<CONTENU>
+<p align="left">
+<br/>Le Premier ministre,<br/>Sur le rapport du ministre du travail et des solidarités,<br/>Vu le code électoral, notamment son article LO 151 ;<br/>Vu le code des pensions civiles et militaires de retraite, notamment son article R. 26 bis ;<br/>Vu le code des pensions de retraite des marins français du commerce, de pêche ou de plaisance, notamment son article R. 8-1 ;<br/>Vu le code rural et de la pêche maritime, notamment son article R. 732-61 ;<br/>Vu le code de la sécurité sociale, notamment ses articles L. 161-21-2 et R. 173-15 ;<br/>Vu le décret n° 2003-1306 du 26 décembre 2003 modifié relatif au régime de retraite des fonctionnaires affiliés à la Caisse nationale de retraites des agents des collectivités locales, notamment son article 15 ;<br/>Vu le décret n° 2004-1056 du 5 octobre 2004 modifié relatif au régime des pensions des ouvriers des établissements industriels de l'Etat, notamment son article 12 ;<br/>Vu le décret n° 2017-1000 du 10 mai 2017 modifié relatif à l'assurance vieillesse-veuvage applicable à Saint-Pierre-et-Miquelon, notamment son article 3 ;<br/>Vu l'avis du conseil d'administration de la Caisse nationale d'assurance vieillesse en date du 1<sup>er</sup> juillet 2026 ;<br/>Vu l'avis du Conseil national d'évaluation des normes en date du 2 juillet 2026 ;<br/>Vu l'avis du conseil central d'administration de la Mutualité sociale agricole en date du 8 juillet 2026 ;<br/>Vu l'avis du conseil territorial de Saint-Pierre-et-Miquelon en date du 13 juillet 2026 ;<br/>Le Conseil d'Etat (section sociale) entendu,<br/>Décrète :</p>
+</CONTENU>
+</VISAS>
+<SIGNATAIRES>
+<CONTENU>
+<div align="left">
+<p>Fait le 12 octobre 2026.</p>
+</div>
+<div align="left">
+<p>Sébastien LECORNU</p>
+<p>Par le Premier ministre :</p>
+</div>
+<div align="left">
+<p>Le ministre du travail et des solidarités,</p>
+<p>Jean-Pierre FARANDOU</p>
+</div>
+<div align="left">
+<p>La ministre des outre-mer,</p>
+<p>Naïma MOUTCHOU</p>
+</div>
+<div align="left">
+<p>Le ministre de l'action et des comptes publics,</p>
+<p>David AMIEL</p>
+</div>
+</CONTENU>
+</SIGNATAIRES>
+<TP>
+<CONTENU/>
+</TP>
+
+<ABRO>
+<CONTENU/>
+</ABRO>
+<RECT>
+<CONTENU/>
+</RECT>
+<SM>
+<CONTENU/>
+</SM>
+
+<ENTREPRISE texte_entreprise="non">
+<DATES_EFFET/>
+<DOMAINES/>
+</ENTREPRISE>
+</TEXTE_VERSION>
