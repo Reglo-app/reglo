@@ -5,7 +5,6 @@ import { Bell, PanelLeft, Search } from "lucide-react";
 
 import { AppBreadcrumb } from "@/components/shell/app-breadcrumb";
 import { SidebarNav } from "@/components/shell/sidebar-nav";
-import { UserMenu, type UserMenuProps } from "@/components/shell/user-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -19,11 +18,12 @@ import { cn } from "@/lib/utils";
 const COLLAPSED_KEY = "reglo.sidebar.collapsed";
 
 type AppShellProps = {
-    user: UserMenuProps;
+    /** User menu slot, rendered by the layout (it loads the current user). */
+    userMenu: React.ReactNode;
     children: React.ReactNode;
 };
 
-export function AppShell({ user, children }: AppShellProps) {
+export function AppShell({ userMenu, children }: AppShellProps) {
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -131,7 +131,7 @@ export function AppShell({ user, children }: AppShellProps) {
                         >
                             <Bell />
                         </Button>
-                        <UserMenu {...user} />
+                        {userMenu}
                     </div>
                 </header>
 

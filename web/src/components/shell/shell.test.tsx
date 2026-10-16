@@ -12,12 +12,6 @@ vi.mock("next/navigation", () => ({
     usePathname: () => pathname.current,
 }));
 
-const user = {
-    fullName: "Camille Martin",
-    roleLabel: "Administratrice",
-    organizationName: "Atelier Démo",
-};
-
 beforeEach(() => {
     pathname.current = "/dashboard";
     localStorage.clear();
@@ -65,7 +59,7 @@ describe("AppBreadcrumb", () => {
 describe("AppShell", () => {
     it("collapses the desktop sidebar and remembers it", async () => {
         const u = userEvent.setup();
-        render(<AppShell user={user}>Contenu</AppShell>);
+        render(<AppShell userMenu={null}>Contenu</AppShell>);
         const toggle = screen.getByRole("button", { name: "Replier le menu" });
         expect(toggle).toHaveAttribute("aria-expanded", "true");
 
@@ -79,7 +73,7 @@ describe("AppShell", () => {
 
     it("opens the mobile menu as a dialog", async () => {
         const u = userEvent.setup();
-        render(<AppShell user={user}>Contenu</AppShell>);
+        render(<AppShell userMenu={null}>Contenu</AppShell>);
         await u.click(screen.getByRole("button", { name: "Ouvrir le menu" }));
         expect(
             screen.getByRole("dialog", { name: "Menu" }),
@@ -87,7 +81,7 @@ describe("AppShell", () => {
     });
 
     it("offers a skip link to the main content", () => {
-        render(<AppShell user={user}>Contenu</AppShell>);
+        render(<AppShell userMenu={null}>Contenu</AppShell>);
         expect(
             screen.getByRole("link", { name: "Aller au contenu" }),
         ).toHaveAttribute("href", "#main-content");

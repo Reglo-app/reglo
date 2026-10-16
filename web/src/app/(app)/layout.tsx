@@ -1,13 +1,11 @@
+import { Suspense } from "react";
 import NextTopLoader from "nextjs-toploader";
 
+import {
+    CurrentUserMenu,
+    CurrentUserMenuSkeleton,
+} from "@/components/shell/current-user-menu";
 import { AppShell } from "@/components/shell/app-shell";
-
-// Placeholder user until the mock data layer is wired.
-const user = {
-    fullName: "Camille Martin",
-    roleLabel: "Administratrice",
-    organizationName: "Atelier Démo",
-};
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
     return (
@@ -19,7 +17,15 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
                 showSpinner={false}
                 shadow={false}
             />
-            <AppShell user={user}>{children}</AppShell>
+            <AppShell
+                userMenu={
+                    <Suspense fallback={<CurrentUserMenuSkeleton />}>
+                        <CurrentUserMenu />
+                    </Suspense>
+                }
+            >
+                {children}
+            </AppShell>
         </>
     );
 }
