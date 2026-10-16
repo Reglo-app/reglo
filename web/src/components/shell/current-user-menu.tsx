@@ -17,9 +17,8 @@ export async function CurrentUserMenu() {
 
 export function CurrentUserMenuSkeleton() {
     return (
-        <div className="flex items-center gap-3" aria-hidden="true">
-            <Skeleton className="size-9 rounded-full" />
-            <Skeleton className="hidden h-8 w-28 md:block" />
+        <div aria-hidden="true">
+            <Skeleton className="ml-2 size-8 rounded-full" />
         </div>
     );
 }

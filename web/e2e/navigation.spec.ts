@@ -38,3 +38,16 @@ test.describe("app navigation", () => {
         await expect(drawer).toBeHidden();
     });
 });
+
+test("opens the search popup from the topbar", async ({ page }) => {
+    await page.goto("/dashboard");
+    await page.getByRole("button", { name: "Rechercher" }).click();
+    await expect(
+        page.getByRole("dialog", { name: "Rechercher" }),
+    ).toBeVisible();
+    await expect(
+        page.getByRole("searchbox", { name: "Rechercher dans REGLO" }),
+    ).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(page.getByRole("dialog")).toBeHidden();
+});

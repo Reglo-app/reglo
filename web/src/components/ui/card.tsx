@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
 // Charter: white cards on surface-subtle. Tinted tones give each dashboard
 // block its own colour (inspiration captures 1, 2, 4, 5).
 const cardVariants = cva(
-    "flex flex-col gap-4 overflow-hidden rounded-xl py-5 text-sm",
+    "flex flex-col gap-4 overflow-hidden rounded-lg py-5 text-sm",
     {
         variants: {
             tone: {
-                default: "border border-border bg-white text-ink shadow-card",
-                brand: "bg-brand-teal text-white",
+                default: "border border-border bg-white text-ink",
+                brand: "bg-brand-gradient text-white",
                 quality: "bg-quality-50 text-ink",
                 hygiene: "bg-hygiene-50 text-ink",
                 safety: "bg-safety-50 text-ink",

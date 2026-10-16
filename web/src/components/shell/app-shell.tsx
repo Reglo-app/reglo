@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, PanelLeft, Search } from "lucide-react";
+import { Bell, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
 import { AppBreadcrumb } from "@/components/shell/app-breadcrumb";
+import { SearchDialog } from "@/components/shell/search-dialog";
 import { SidebarNav } from "@/components/shell/sidebar-nav";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
     Sheet,
     SheetContent,
@@ -81,18 +81,18 @@ export function AppShell({ userMenu, children }: AppShellProps) {
             <div className="flex min-w-0 flex-1 flex-col">
                 <header className="sticky top-0 z-40 flex h-16 items-center gap-2 border-b border-border bg-surface-subtle px-4 sm:px-6">
                     <Button
-                        variant="ghost"
-                        size="icon"
+                        variant="toolbar"
+                        size="toolbar-icon"
                         className="lg:hidden"
                         aria-label="Ouvrir le menu"
                         aria-expanded={mobileOpen}
                         onClick={() => setMobileOpen(true)}
                     >
-                        <PanelLeft />
+                        <PanelLeftOpen />
                     </Button>
                     <Button
-                        variant="ghost"
-                        size="icon"
+                        variant="toolbar"
+                        size="toolbar-icon"
                         className="hidden lg:inline-flex"
                         aria-label={
                             collapsed ? "Déplier le menu" : "Replier le menu"
@@ -101,32 +101,16 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                         aria-expanded={!collapsed}
                         onClick={toggleCollapsed}
                     >
-                        <PanelLeft />
+                        {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
                     </Button>
 
                     <AppBreadcrumb />
 
                     <div className="ml-auto flex items-center gap-1 sm:gap-2">
-                        {/* Search is a placeholder until the search feature exists. */}
-                        <form
-                            role="search"
-                            className="relative hidden md:block"
-                            onSubmit={(event) => event.preventDefault()}
-                        >
-                            <Search
-                                aria-hidden="true"
-                                className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-ink-muted"
-                            />
-                            <Input
-                                type="search"
-                                aria-label="Rechercher"
-                                placeholder="Rechercher…"
-                                className="w-64 rounded-full border-border bg-white pl-10"
-                            />
-                        </form>
+                        <SearchDialog />
                         <Button
-                            variant="ghost"
-                            size="icon"
+                            variant="toolbar"
+                            size="toolbar-icon"
                             aria-label="Notifications"
                         >
                             <Bell />
@@ -138,7 +122,8 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                 <main
                     id="main-content"
                     tabIndex={-1}
-                    className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
+                    // Uses the full width next to the sidebar, folded or not.
+                    className="w-full flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
                 >
                     {children}
                 </main>

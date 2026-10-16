@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 // Charter: a state always has a word (the badge label), never colour alone.
 const badgeVariants = cva(
-    "inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-full px-2.5 text-xs font-medium whitespace-nowrap [&>svg]:pointer-events-none [&>svg]:size-3.5",
+    "inline-flex h-6 w-fit shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-sm px-2 text-xs font-medium whitespace-nowrap [&>svg]:pointer-events-none [&>svg]:size-3.5",
     {
         variants: {
             variant: {

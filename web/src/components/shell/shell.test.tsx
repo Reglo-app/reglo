@@ -59,8 +59,53 @@ describe("SidebarNav", () => {
     it("keeps accessible labels when collapsed", () => {
         render(<SidebarNav collapsed />);
         expect(
-            screen.getByRole("link", { name: "Veille réglementaire" }),
+            screen.getByRole("link", { name: "Formations" }),
         ).toBeInTheDocument();
+    });
+
+    it("titles only the QHSE pillars section", () => {
+        render(<SidebarNav />);
+        expect(screen.getByText("Domaines QHSE")).toBeInTheDocument();
+        for (const title of ["Pilotage", "Ressources"]) {
+            expect(screen.queryByText(title)).not.toBeInTheDocument();
+        }
+    });
+
+    it("shows Diagnostic only inside the Tableau de bord branch", () => {
+        pathname.current = "/documents";
+        const { unmount } = render(<SidebarNav />);
+        expect(
+            screen.queryByRole("link", { name: "Diagnostic" }),
+        ).not.toBeInTheDocument();
+        unmount();
+
+        pathname.current = "/dashboard";
+        render(<SidebarNav />);
+        expect(
+            screen.getByRole("link", { name: "Diagnostic" }),
+        ).toBeInTheDocument();
+    });
+
+    it("on Diagnostic, marks the child as current and emphasises the parent", () => {
+        pathname.current = "/diagnostic";
+        render(<SidebarNav />);
+        const child = screen.getByRole("link", { name: "Diagnostic" });
+        const parent = screen.getByRole("link", { name: "Tableau de bord" });
+        expect(child).toHaveAttribute("aria-current", "page");
+        expect(child.querySelector("svg")).toBeNull();
+        expect(parent).not.toHaveAttribute("aria-current");
+        expect(parent).toHaveClass("font-semibold");
+    });
+
+    it("hides sub-pages when collapsed but keeps the parent filled", () => {
+        pathname.current = "/diagnostic";
+        render(<SidebarNav collapsed />);
+        expect(
+            screen.queryByRole("link", { name: "Diagnostic" }),
+        ).not.toBeInTheDocument();
+        expect(
+            screen.getByRole("link", { name: "Tableau de bord" }),
+        ).toHaveClass("bg-green-50");
     });
 });
 

@@ -4,22 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { DOMAIN_ICON_CLASSES } from "@/lib/domains";
 import {
     HOME_ITEM,
-    NAV_GROUPS,
+    NAV_SECTIONS,
     SETTINGS_ITEM,
-    findNavItem,
+    findNavEntry,
     type NavItem,
 } from "@/lib/navigation";
-import type { DomainKey } from "@/lib/domains";
 import { cn } from "@/lib/utils";
-
-const DOMAIN_DOT_CLASSES: Record<DomainKey, string> = {
-    quality: "bg-quality",
-    hygiene: "bg-hygiene",
-    safety: "bg-safety",
-    environment: "bg-environment",
-};
 
 type SidebarNavProps = {
     /** Icons only (desktop collapsed sidebar). */
@@ -28,7 +21,11 @@ type SidebarNavProps = {
     onNavigate?: () => void;
 };
 
-function NavLink({
+/**
+ * One top-level entry and, inside its branch, its sub-pages. Sub-pages have
+ * no icon and their text lines up with the parent's text.
+ */
+function NavBranch({
     item,
     collapsed,
     onNavigate,
@@ -37,53 +34,89 @@ function NavLink({
     collapsed: boolean;
     onNavigate?: () => void;
 }) {
-    const pathname = usePathname();
-    const active = findNavItem(pathname)?.href === item.href;
+    const entry = findNavEntry(usePathname());
+    const inBranch = entry?.item.href === item.href;
+    const current = inBranch && !entry.isChild;
+    // Parent of the current sub-page: emphasised, without the active fill.
+    // In the folded sidebar there are no sub-pages, so it keeps the fill.
+    const parentOfCurrent = inBranch && entry.isChild;
+    const filled = current || (parentOfCurrent && collapsed);
     const Icon = item.icon;
 
     return (
-        <Link
-            href={item.href}
-            onClick={onNavigate}
-            aria-current={active ? "page" : undefined}
-            title={collapsed ? item.label : undefined}
-            className={cn(
-                "flex min-h-11 items-center gap-3 rounded-md px-3 text-base font-medium transition-colors",
-                active
-                    ? "bg-green-50 text-ink"
-                    : "text-ink-muted hover:bg-surface-subtle hover:text-ink",
-                collapsed && "justify-center px-0",
-            )}
-        >
-            <Icon
-                aria-hidden="true"
+        <li>
+            <Link
+                href={item.href}
+                onClick={onNavigate}
+                aria-current={current ? "page" : undefined}
+                title={collapsed ? item.label : undefined}
                 className={cn(
-                    "size-5 shrink-0",
-                    active ? "text-green-700" : "text-ink-muted",
+                    "flex min-h-10 items-center gap-3 rounded-md px-3 text-base font-medium transition-colors",
+                    filled
+                        ? "bg-green-50 text-ink"
+                        : "text-ink-muted hover:bg-surface-subtle hover:text-ink",
+                    parentOfCurrent && "font-semibold text-ink",
+                    collapsed && "justify-center px-0",
                 )}
-            />
-            <span className={cn(collapsed && "sr-only")}>{item.label}</span>
-            {item.domain && !collapsed && (
-                <span
+            >
+                <Icon
                     aria-hidden="true"
                     className={cn(
-                        "ml-auto size-2.5 shrink-0 rounded-full",
-                        DOMAIN_DOT_CLASSES[item.domain],
+                        "size-5 shrink-0",
+                        // QHSE pillars keep their colour; other icons follow the state.
+                        item.domain
+                            ? DOMAIN_ICON_CLASSES[item.domain]
+                            : inBranch
+                              ? "text-green-700"
+                              : "text-ink-muted",
                     )}
                 />
+                <span className={cn(collapsed && "sr-only")}>{item.label}</span>
+            </Link>
+
+            {item.children && inBranch && !collapsed && (
+                // Thin line from under the parent icon (its centre is 12px
+                // padding + 10px = 22px from the left), along the sub-pages,
+                // slightly shorter than the list.
+                <ul className="relative mt-1 ml-[21px] flex flex-col gap-1 pl-[5px] before:absolute before:top-0.5 before:bottom-1.5 before:left-0 before:w-px before:bg-border">
+                    {item.children.map((child) => {
+                        const childCurrent = entry.href === child.href;
+                        return (
+                            <li key={child.href}>
+                                <Link
+                                    href={child.href}
+                                    onClick={onNavigate}
+                                    aria-current={
+                                        childCurrent ? "page" : undefined
+                                    }
+                                    // Text lines up with the parent's text at 44px:
+                                    // 21px margin + 1px line + 4px + 18px.
+                                    className={cn(
+                                        "flex min-h-9 items-center rounded-md pr-3 pl-[18px] text-sm font-medium transition-colors",
+                                        childCurrent
+                                            ? "bg-green-50 text-ink"
+                                            : "text-ink-muted hover:bg-surface-subtle hover:text-ink",
+                                    )}
+                                >
+                                    {child.label}
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
             )}
-        </Link>
+        </li>
     );
 }
 
 export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
     return (
-        <div className="flex h-full flex-col gap-6 overflow-y-auto px-3 py-4">
+        <div className="flex h-full flex-col gap-4 py-4">
             <Link
                 href={HOME_ITEM.href}
                 onClick={onNavigate}
                 className={cn(
-                    "flex min-h-11 items-center gap-2 rounded-md px-2",
+                    "mx-3 flex min-h-10 items-center gap-2 rounded-md px-2",
                     collapsed && "justify-center px-0",
                 )}
             >
@@ -107,40 +140,42 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
 
             <nav
                 aria-label="Navigation principale"
-                className="flex flex-1 flex-col gap-6"
+                className="flex min-h-0 flex-1 flex-col"
             >
-                {NAV_GROUPS.map((group) => (
-                    <div key={group.label} className="flex flex-col gap-1">
-                        <p
-                            className={cn(
-                                "px-3 pb-1 text-xs font-medium tracking-wide text-ink-muted uppercase",
-                                collapsed && "sr-only",
+                {/* Only the sections scroll; Paramètres stays at the bottom. */}
+                <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-3">
+                    {NAV_SECTIONS.map((section, index) => (
+                        <div key={section.title ?? index}>
+                            {section.title && (
+                                <p
+                                    className={cn(
+                                        "px-3 pb-1.5 text-xs font-medium tracking-wide text-ink-muted uppercase",
+                                        collapsed && "sr-only",
+                                    )}
+                                >
+                                    {section.title}
+                                </p>
                             )}
-                        >
-                            {group.label}
-                        </p>
-                        <ul className="flex flex-col gap-1">
-                            {group.items.map((item) => (
-                                <li key={item.href}>
-                                    <NavLink
+                            <ul className="flex flex-col gap-1">
+                                {section.items.map((item) => (
+                                    <NavBranch
+                                        key={item.href}
                                         item={item}
                                         collapsed={collapsed}
                                         onNavigate={onNavigate}
                                     />
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
 
-                <ul className="mt-auto flex flex-col gap-1">
-                    <li>
-                        <NavLink
-                            item={SETTINGS_ITEM}
-                            collapsed={collapsed}
-                            onNavigate={onNavigate}
-                        />
-                    </li>
+                <ul className="mx-3 mt-2 flex flex-col gap-1 border-t border-border pt-2">
+                    <NavBranch
+                        item={SETTINGS_ITEM}
+                        collapsed={collapsed}
+                        onNavigate={onNavigate}
+                    />
                 </ul>
             </nav>
         </div>

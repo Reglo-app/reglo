@@ -53,7 +53,8 @@ function BreadcrumbLink({
         <Comp
             data-slot="breadcrumb-link"
             className={cn(
-                "inline-flex min-h-11 items-center gap-1.5 rounded-sm px-1 transition-colors hover:text-ink [&_svg]:size-4 [&_svg]:shrink-0",
+                // Shopify-like hover: very light green background, light shadow.
+                "inline-flex min-h-8.75 items-center gap-1.5 rounded-md px-2 transition-[color,background-color,box-shadow] duration-200 hover:bg-brand-green/10 hover:text-ink [&_svg]:size-4 [&_svg]:shrink-0",
                 className,
             )}
             {...props}
@@ -67,7 +68,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
             data-slot="breadcrumb-page"
             aria-current="page"
             className={cn(
-                "inline-flex min-h-11 items-center gap-1.5 px-1 font-medium text-ink [&_svg]:size-4 [&_svg]:shrink-0",
+                "inline-flex min-h-10 items-center gap-1.5 px-2 font-medium text-ink [&_svg]:size-4 [&_svg]:shrink-0",
                 className,
             )}
             {...props}
@@ -85,7 +86,8 @@ function BreadcrumbSeparator({
             data-slot="breadcrumb-separator"
             role="presentation"
             aria-hidden="true"
-            className={cn("px-0.5 text-border-strong", className)}
+            // 2px larger than the links so the "/" is easier to see.
+            className={cn("px-0.5 text-base text-border-strong", className)}
             {...props}
         >
             {children ?? "/"}

@@ -33,24 +33,20 @@ export function UserMenu({
     organizationName,
 }: UserMenuProps) {
     return (
-        <DropdownMenu>
+        // Not modal: opening the menu must not lock the page scroll (that
+        // hid the scrollbar and shifted the layout).
+        <DropdownMenu modal={false}>
+            {/* Round avatar and chevron only; name, role and organization
+                are in the menu. */}
             <DropdownMenuTrigger
-                aria-label={`Menu de ${fullName}`}
-                className="flex min-h-11 items-center gap-3 rounded-full py-1 pr-2 pl-1 transition-colors hover:bg-white aria-expanded:bg-white"
+                aria-label={`Menu de ${fullName}, ${organizationName}`}
+                className="pl-1 flex items-center gap-1 rounded-full py-0.75 px-0.5 pr-1.5 transition-[background-color,box-shadow] hover:bg-brand-green/10 aria-expanded:bg-green-50 duration-200"
             >
                 <span
                     aria-hidden="true"
-                    className="flex size-9 items-center justify-center rounded-full bg-brand-blue text-sm font-semibold text-brand-teal"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-teal text-xs font-semibold text-white"
                 >
                     {initials(fullName)}
-                </span>
-                <span className="hidden text-left leading-tight md:block">
-                    <span className="block text-sm font-medium text-ink">
-                        {fullName}
-                    </span>
-                    <span className="block text-xs text-ink-muted">
-                        {roleLabel}
-                    </span>
                 </span>
                 <ChevronDown
                     aria-hidden="true"
@@ -63,7 +59,7 @@ export function UserMenu({
                         {fullName}
                     </span>
                     <span className="block text-xs text-ink-muted">
-                        {organizationName}
+                        {roleLabel} · {organizationName}
                     </span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
