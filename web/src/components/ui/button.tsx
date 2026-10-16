@@ -1,0 +1,61 @@
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Slot } from "radix-ui";
+
+import { cn } from "@/lib/utils";
+
+const buttonVariants = cva(
+    "inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-transparent text-base font-medium whitespace-nowrap transition-colors select-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+    {
+        variants: {
+            variant: {
+                // Primary action: one per page header.
+                default: "bg-brand-teal text-white hover:bg-teal-900",
+                // Highlight action (charter: yellow fill with teal text).
+                highlight:
+                    "bg-brand-yellow text-brand-teal hover:bg-brand-yellow/80",
+                secondary: "bg-teal-50 text-ink hover:bg-green-50",
+                outline:
+                    "border-border-strong bg-white text-ink hover:bg-surface-subtle",
+                ghost: "text-ink hover:bg-surface-subtle aria-expanded:bg-surface-subtle",
+                destructive: "bg-danger text-white hover:bg-danger-700",
+                link: "h-auto px-0 text-green-700 underline-offset-4 hover:underline",
+            },
+            size: {
+                // Charter: interactive controls are at least 44px high.
+                default: "h-11 px-5",
+                lg: "h-12 px-6 text-lg",
+                icon: "size-11",
+            },
+        },
+        defaultVariants: {
+            variant: "default",
+            size: "default",
+        },
+    },
+);
+
+function Button({
+    className,
+    variant = "default",
+    size = "default",
+    asChild = false,
+    ...props
+}: React.ComponentProps<"button"> &
+    VariantProps<typeof buttonVariants> & {
+        asChild?: boolean;
+    }) {
+    const Comp = asChild ? Slot.Root : "button";
+
+    return (
+        <Comp
+            data-slot="button"
+            data-variant={variant}
+            data-size={size}
+            className={cn(buttonVariants({ variant, size, className }))}
+            {...props}
+        />
+    );
+}
+
+export { Button, buttonVariants };
