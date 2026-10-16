@@ -54,7 +54,7 @@ function BreadcrumbLink({
             data-slot="breadcrumb-link"
             className={cn(
                 // Shopify-like hover: very light green background, light shadow.
-                "inline-flex min-h-10 items-center gap-1.5 rounded-md px-2 transition-[color,background-color,box-shadow] hover:bg-green-50 hover:text-ink hover:shadow-sm [&_svg]:size-4 [&_svg]:shrink-0",
+                "inline-flex min-h-8.75 items-center gap-1.5 rounded-md px-2 transition-[color,background-color,box-shadow] duration-200 hover:bg-brand-green/10 hover:text-ink [&_svg]:size-4 [&_svg]:shrink-0",
                 className,
             )}
             {...props}

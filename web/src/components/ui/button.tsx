@@ -25,7 +25,7 @@ const buttonVariants = cva(
                 // compact, light border and small shadow; on hover a darker
                 // border, very light green and a slightly larger shadow.
                 toolbar:
-                    "rounded-(--radius-control) border border-border bg-white text-sm font-semibold text-ink shadow-xs transition-[color,background-color,border-color,box-shadow] hover:border-border-strong hover:bg-green-50 hover:shadow-sm",
+                    "rounded-(--radius-control) border border-border bg-white text-sm font-semibold text-ink shadow-xs transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-green-50/1",
             },
             size: {
                 // Charter: interactive controls are at least 40px high.
