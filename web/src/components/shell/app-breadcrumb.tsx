@@ -1,0 +1,59 @@
+"use client";
+
+import { Fragment } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { getBreadcrumb } from "@/lib/navigation";
+
+/** `[icon] Section / [icon] Page / Detail`, built from the current path. */
+export function AppBreadcrumb() {
+    const crumbs = getBreadcrumb(usePathname());
+
+    return (
+        <Breadcrumb className="min-w-0">
+            <BreadcrumbList className="flex-nowrap">
+                {crumbs.map((crumb, index) => {
+                    const Icon = crumb.icon;
+                    const isLast = index === crumbs.length - 1;
+                    const content = (
+                        <>
+                            {Icon && <Icon aria-hidden="true" />}
+                            <span className="truncate">{crumb.label}</span>
+                        </>
+                    );
+
+                    return (
+                        <Fragment key={crumb.href}>
+                            {index > 0 && (
+                                <BreadcrumbSeparator className="hidden sm:list-item" />
+                            )}
+                            <BreadcrumbItem
+                                // On small screens only the current page is shown.
+                                className={
+                                    isLast ? "min-w-0" : "hidden sm:inline-flex"
+                                }
+                            >
+                                {isLast ? (
+                                    <BreadcrumbPage>{content}</BreadcrumbPage>
+                                ) : (
+                                    <BreadcrumbLink asChild>
+                                        <Link href={crumb.href}>{content}</Link>
+                                    </BreadcrumbLink>
+                                )}
+                            </BreadcrumbItem>
+                        </Fragment>
+                    );
+                })}
+            </BreadcrumbList>
+        </Breadcrumb>
+    );
+}
