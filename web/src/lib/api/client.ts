@@ -1,5 +1,16 @@
-import { mockCurrentUser, mockDashboardSummary } from "./mocks";
-import type { CurrentUser, DashboardSummary } from "./types";
+import {
+    mockCurrentUser,
+    mockDashboardSummary,
+    mockDomainDetails,
+    mockNewsArticles,
+} from "./mocks";
+import type {
+    CurrentUser,
+    DashboardSummary,
+    DomainDetail,
+    NewsArticle,
+} from "./types";
+import type { DomainKey } from "@/lib/domains";
 
 /**
  * Mocks are used unless NEXT_PUBLIC_USE_MOCKS is "false". NEXT_PUBLIC_*
@@ -41,17 +52,40 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export type Api = {
     getCurrentUser(): Promise<CurrentUser>;
     getDashboardSummary(): Promise<DashboardSummary>;
+    /** null when the article does not exist (or is not visible). */
+    getNewsArticle(id: string): Promise<NewsArticle | null>;
+    getDomainDetail(domain: DomainKey): Promise<DomainDetail>;
 };
 
 const httpApi: Api = {
     getCurrentUser: () => request<CurrentUser>("/api/me"),
     getDashboardSummary: () => request<DashboardSummary>("/api/dashboard"),
+    getDomainDetail: (domain) =>
+        request<DomainDetail>(`/api/domains/${domain}`),
+    getNewsArticle: async (id) => {
+        try {
+            return await request<NewsArticle>(
+                `/api/news/${encodeURIComponent(id)}`,
+            );
+        } catch (error) {
+            if (error instanceof ApiError && error.status === 404) {
+                return null;
+            }
+            throw error;
+        }
+    },
 };
 
 // structuredClone: callers can never mutate the shared mock objects.
 const mockApi: Api = {
     getCurrentUser: async () => structuredClone(mockCurrentUser),
     getDashboardSummary: async () => structuredClone(mockDashboardSummary),
+    getDomainDetail: async (domain) =>
+        structuredClone(mockDomainDetails[domain]),
+    getNewsArticle: async (id) => {
+        const article = mockNewsArticles.find((a) => a.id === id);
+        return article ? structuredClone(article) : null;
+    },
 };
 
 export function createApi(useMocks: boolean = USE_MOCKS): Api {

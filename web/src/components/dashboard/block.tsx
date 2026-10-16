@@ -25,7 +25,7 @@ export function BlockHeader({
             </CardTitle>
             {seeAll && (
                 <CardAction>
-                    <Button asChild variant="toolbar" size="toolbar">
+                    <Button asChild variant="seeAll" size="seeAll">
                         <Link href={seeAll.href}>
                             Tout voir
                             <span className="sr-only"> : {seeAll.label}</span>

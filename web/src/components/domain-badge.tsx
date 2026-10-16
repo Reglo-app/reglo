@@ -1,15 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import { DOMAINS, type DomainKey } from "@/lib/domains";
+import { DOMAIN_ICON_CLASSES, DOMAINS, type DomainKey } from "@/lib/domains";
 import { cn } from "@/lib/utils";
 
-const DOT_CLASSES: Record<DomainKey, string> = {
-    quality: "bg-quality",
-    hygiene: "bg-hygiene",
-    safety: "bg-safety",
-    environment: "bg-environment",
-};
-
-/** QHSE domain chip: tinted background, coloured dot and the domain name. */
+/** QHSE domain chip: tinted background, coloured domain icon and name. */
 export function DomainBadge({
     domain,
     className,
@@ -17,11 +10,12 @@ export function DomainBadge({
     domain: DomainKey;
     className?: string;
 }) {
+    const Icon = DOMAINS[domain].icon;
     return (
         <Badge variant={domain} className={className}>
-            <span
+            <Icon
                 aria-hidden="true"
-                className={cn("size-2 rounded-full", DOT_CLASSES[domain])}
+                className={cn("size-3.5", DOMAIN_ICON_CLASSES[domain])}
             />
             {DOMAINS[domain].label}
         </Badge>

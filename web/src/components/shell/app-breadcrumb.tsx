@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -16,7 +16,7 @@ import { DOMAIN_ICON_CLASSES } from "@/lib/domains";
 import { getBreadcrumb } from "@/lib/navigation";
 
 /** `[icon] Section / [icon] Page / Detail`, built from the current path. */
-export function AppBreadcrumb() {
+function AppBreadcrumbContent() {
     const crumbs = getBreadcrumb(usePathname());
 
     return (
@@ -64,5 +64,17 @@ export function AppBreadcrumb() {
                 })}
             </BreadcrumbList>
         </Breadcrumb>
+    );
+}
+
+/**
+ * The current URL is read inside Suspense (pages with a dynamic id are
+ * prerendered without breadcrumb, then it appears).
+ */
+export function AppBreadcrumb() {
+    return (
+        <Suspense fallback={<div className="min-w-0 flex-1" />}>
+            <AppBreadcrumbContent />
+        </Suspense>
     );
 }

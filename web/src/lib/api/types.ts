@@ -71,6 +71,50 @@ export type NewsSummary = {
     imageUrl: string | null;
 };
 
+/** `GET /api/news/{id}`: one regulatory news article. */
+export type NewsArticle = NewsSummary & {
+    /** Short summary shown under the title. */
+    summary: string;
+    /** Body, one string per paragraph (plain text). */
+    paragraphs: string[];
+    /** Where the text comes from (official journal, ministry…). */
+    sourceName: string;
+    sourceUrl: string | null;
+};
+
+/** Score of one diagnostic theme of a pillar (DATA-01). */
+export type ThemeScore = {
+    id: string;
+    label: string;
+    score: number;
+};
+
+/** Evidence document close to its expiry date (US-11). */
+export type ExpiringDocument = {
+    id: string;
+    title: string;
+    /** ISO 8601 expiry date. */
+    dueDate: string;
+};
+
+/** `GET /api/domains/{domain}`: everything a QHSE pillar page shows. */
+export type DomainDetail = {
+    /** ISO 8601 date the data was computed: "today" for due dates. */
+    generatedAt: string;
+    domain: DomainKey;
+    /** Pillar score from 0 to 100, or null if no diagnostic yet. */
+    score: number | null;
+    previousScore: number | null;
+    /** One entry per diagnostic theme of the pillar. */
+    themes: ThemeScore[];
+    /** Open actions of the pillar, soonest first (at most 5). */
+    actions: ActionSummary[];
+    /** Documents expiring in the next 60 days or already expired. */
+    expiringDocuments: ExpiringDocument[];
+    /** Latest news of the pillar (at most 3). */
+    latestNews: NewsSummary[];
+};
+
 /** `GET /api/dashboard`: everything the home page shows. */
 export type DashboardSummary = {
     /** ISO 8601 date the summary was computed: "today" for due dates. */
