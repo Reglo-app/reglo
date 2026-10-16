@@ -1,9 +1,16 @@
 import {
     mockCurrentUser,
     mockDashboardSummary,
+    mockDomainDetails,
     mockNewsArticles,
 } from "./mocks";
-import type { CurrentUser, DashboardSummary, NewsArticle } from "./types";
+import type {
+    CurrentUser,
+    DashboardSummary,
+    DomainDetail,
+    NewsArticle,
+} from "./types";
+import type { DomainKey } from "@/lib/domains";
 
 /**
  * Mocks are used unless NEXT_PUBLIC_USE_MOCKS is "false". NEXT_PUBLIC_*
@@ -47,11 +54,14 @@ export type Api = {
     getDashboardSummary(): Promise<DashboardSummary>;
     /** null when the article does not exist (or is not visible). */
     getNewsArticle(id: string): Promise<NewsArticle | null>;
+    getDomainDetail(domain: DomainKey): Promise<DomainDetail>;
 };
 
 const httpApi: Api = {
     getCurrentUser: () => request<CurrentUser>("/api/me"),
     getDashboardSummary: () => request<DashboardSummary>("/api/dashboard"),
+    getDomainDetail: (domain) =>
+        request<DomainDetail>(`/api/domains/${domain}`),
     getNewsArticle: async (id) => {
         try {
             return await request<NewsArticle>(
@@ -70,6 +80,8 @@ const httpApi: Api = {
 const mockApi: Api = {
     getCurrentUser: async () => structuredClone(mockCurrentUser),
     getDashboardSummary: async () => structuredClone(mockDashboardSummary),
+    getDomainDetail: async (domain) =>
+        structuredClone(mockDomainDetails[domain]),
     getNewsArticle: async (id) => {
         const article = mockNewsArticles.find((a) => a.id === id);
         return article ? structuredClone(article) : null;

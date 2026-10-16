@@ -2,7 +2,17 @@
 // News covers are generated placeholders in public/mock/news/.
 // No real person or company: names are invented.
 
-import type { CurrentUser, DashboardSummary, NewsArticle } from "./types";
+import type { DomainKey } from "@/lib/domains";
+
+import type {
+    ActionSummary,
+    CurrentUser,
+    DashboardSummary,
+    DomainDetail,
+    ExpiringDocument,
+    NewsArticle,
+    ThemeScore,
+} from "./types";
 
 export const mockCurrentUser: CurrentUser = {
     id: "0192f0c4-7a3e-7c3a-9b1e-5d2a1c000001",
@@ -156,3 +166,169 @@ export const mockNewsArticles: NewsArticle[] = [
         sourceUrl: null,
     },
 ];
+
+// --- QHSE pillar pages -----------------------------------------------------
+
+/** Diagnostic themes per pillar (from the DATA-01 draft referential). */
+const MOCK_THEMES: Record<DomainKey, ThemeScore[]> = {
+    quality: [
+        { id: "qua.steering", label: "Pilotage et objectifs", score: 80 },
+        {
+            id: "qua.customers",
+            label: "Satisfaction et réclamations clients",
+            score: 74,
+        },
+        {
+            id: "qua.nonconformities",
+            label: "Non-conformités et actions correctives",
+            score: 61,
+        },
+        { id: "qua.audits", label: "Audits internes", score: 55 },
+        { id: "qua.documents", label: "Maîtrise documentaire", score: 88 },
+    ],
+    hygiene: [
+        {
+            id: "hyg.premises",
+            label: "Hygiène des locaux et des postes",
+            score: 70,
+        },
+        {
+            id: "hyg.health",
+            label: "Santé au travail et suivi médical",
+            score: 52,
+        },
+        { id: "hyg.ergonomics", label: "Gestes et postures", score: 45 },
+        { id: "hyg.psychosocial", label: "Risques psychosociaux", score: 58 },
+        { id: "hyg.firstaid", label: "Premiers secours", score: 66 },
+    ],
+    safety: [
+        { id: "saf.duerp", label: "Évaluation des risques (DUERP)", score: 35 },
+        { id: "saf.ppe", label: "Équipements de protection", score: 62 },
+        { id: "saf.training", label: "Formations et habilitations", score: 48 },
+        { id: "saf.fire", label: "Incendie et évacuation", score: 57 },
+        { id: "saf.checks", label: "Vérifications périodiques", score: 44 },
+    ],
+    environment: [
+        { id: "env.waste", label: "Déchets et tri", score: 82 },
+        { id: "env.energy", label: "Énergie et eau", score: 71 },
+        { id: "env.chemicals", label: "Produits dangereux", score: 68 },
+        {
+            id: "env.compliance",
+            label: "Conformité réglementaire",
+            score: 79,
+        },
+        { id: "env.awareness", label: "Sensibilisation", score: 85 },
+    ],
+};
+
+const MOCK_EXTRA_ACTIONS: ActionSummary[] = [
+    {
+        id: "action-5",
+        title: "Mettre à jour le DUERP",
+        domain: "safety",
+        ownerName: "Camille Martin",
+        dueDate: "2026-10-10T00:00:00.000Z",
+        status: "in_progress",
+    },
+    {
+        id: "action-6",
+        title: "Afficher le protocole de nettoyage des vestiaires",
+        domain: "hygiene",
+        ownerName: "Inès Moreau",
+        dueDate: "2026-10-14T00:00:00.000Z",
+        status: "todo",
+    },
+    {
+        id: "action-7",
+        title: "Analyser les 3 réclamations clients de septembre",
+        domain: "quality",
+        ownerName: "Léo Bernard",
+        dueDate: "2026-10-27T00:00:00.000Z",
+        status: "todo",
+    },
+    {
+        id: "action-8",
+        title: "Relever les compteurs d'eau du site",
+        domain: "environment",
+        ownerName: "Inès Moreau",
+        dueDate: "2026-11-03T00:00:00.000Z",
+        status: "todo",
+    },
+];
+
+const MOCK_DOCUMENTS: Record<DomainKey, ExpiringDocument[]> = {
+    quality: [
+        {
+            id: "doc-q1",
+            title: "Certificat ISO 9001",
+            dueDate: "2026-12-01T00:00:00.000Z",
+        },
+    ],
+    hygiene: [
+        {
+            id: "doc-h1",
+            title: "Contrat de dératisation",
+            dueDate: "2026-10-30T00:00:00.000Z",
+        },
+        {
+            id: "doc-h2",
+            title: "Attestation de formation SST de L. Bernard",
+            dueDate: "2026-11-20T00:00:00.000Z",
+        },
+    ],
+    safety: [
+        {
+            id: "doc-s1",
+            title: "Rapport de vérification des extincteurs",
+            dueDate: "2026-10-12T00:00:00.000Z",
+        },
+        {
+            id: "doc-s2",
+            title: "Habilitation électrique de L. Bernard",
+            dueDate: "2026-10-28T00:00:00.000Z",
+        },
+        {
+            id: "doc-s3",
+            title: "Rapport de vérification du chariot élévateur",
+            dueDate: "2026-12-05T00:00:00.000Z",
+        },
+    ],
+    environment: [
+        {
+            id: "doc-e1",
+            title: "Contrat d'enlèvement des déchets",
+            dueDate: "2026-11-05T00:00:00.000Z",
+        },
+    ],
+};
+
+function mockDomainDetail(domain: DomainKey): DomainDetail {
+    const score = mockDashboardSummary.domains.find((d) => d.domain === domain);
+    const byDue = (a: { dueDate: string }, b: { dueDate: string }) =>
+        a.dueDate.localeCompare(b.dueDate);
+    return {
+        generatedAt: mockDashboardSummary.generatedAt,
+        domain,
+        score: score?.score ?? null,
+        previousScore: score?.previousScore ?? null,
+        themes: MOCK_THEMES[domain],
+        actions: [
+            ...mockDashboardSummary.upcomingActions,
+            ...MOCK_EXTRA_ACTIONS,
+        ]
+            .filter((action) => action.domain === domain)
+            .sort(byDue)
+            .slice(0, 5),
+        expiringDocuments: [...MOCK_DOCUMENTS[domain]].sort(byDue),
+        latestNews: mockDashboardSummary.latestNews.filter(
+            (news) => news.domain === domain,
+        ),
+    };
+}
+
+export const mockDomainDetails: Record<DomainKey, DomainDetail> = {
+    quality: mockDomainDetail("quality"),
+    hygiene: mockDomainDetail("hygiene"),
+    safety: mockDomainDetail("safety"),
+    environment: mockDomainDetail("environment"),
+};

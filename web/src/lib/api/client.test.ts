@@ -38,6 +38,18 @@ describe("mock api", () => {
         expect(await api.getNewsArticle("unknown")).toBeNull();
     });
 
+    it("returns a pillar page with its own data only", async () => {
+        const detail = await api.getDomainDetail("environment");
+        expect(detail.domain).toBe("environment");
+        expect(detail.themes.length).toBeGreaterThan(0);
+        expect(detail.actions.every((a) => a.domain === "environment")).toBe(
+            true,
+        );
+        expect(detail.latestNews.every((n) => n.domain === "environment")).toBe(
+            true,
+        );
+    });
+
     it("does not call the network", async () => {
         const fetchMock = vi.fn();
         vi.stubGlobal("fetch", fetchMock);

@@ -95,3 +95,21 @@ test("opens a news article from the dashboard", async ({ page }) => {
         page.getByRole("navigation", { name: "Fil d'Ariane" }),
     ).toContainText("Article");
 });
+
+test("a pillar page shows its five blocks", async ({ page }) => {
+    await page.goto("/domains/safety");
+    await expect(
+        page.getByRole("img", { name: "Score Sécurité : 49 sur 100" }),
+    ).toBeVisible();
+    for (const title of [
+        "Score Sécurité",
+        "Actions en cours",
+        "Justificatifs à renouveler",
+        "Veille réglementaire",
+    ]) {
+        await expect(
+            page.getByRole("heading", { level: 2, name: title }),
+        ).toBeVisible();
+    }
+    await expect(page.getByText("Score par thème")).toBeVisible();
+});

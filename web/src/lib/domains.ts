@@ -40,6 +40,30 @@ export const DOMAIN_ICON_CLASSES: Record<DomainKey, string> = {
     environment: "text-environment",
 };
 
+/** Solid fill in the domain colour (progress bars). */
+export const DOMAIN_FILL_CLASSES: Record<DomainKey, string> = {
+    quality: "bg-quality",
+    hygiene: "bg-hygiene",
+    safety: "bg-safety",
+    environment: "bg-environment",
+};
+
+/** Light tint of the domain colour (panels, covers). */
+export const DOMAIN_TINT_CLASSES: Record<DomainKey, string> = {
+    quality: "bg-quality-50",
+    hygiene: "bg-hygiene-50",
+    safety: "bg-safety-50",
+    environment: "bg-environment-50",
+};
+
+/** Stroke in the domain colour (score rings). */
+export const DOMAIN_STROKE_CLASSES: Record<DomainKey, string> = {
+    quality: "stroke-quality",
+    hygiene: "stroke-hygiene",
+    safety: "stroke-safety",
+    environment: "stroke-environment",
+};
+
 export function isDomainKey(value: unknown): value is DomainKey {
     return (
         typeof value === "string" &&
