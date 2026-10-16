@@ -21,10 +21,10 @@ const buttonVariants = cva(
                 ghost: "text-ink hover:bg-green-50",
                 destructive: "bg-danger text-white hover:bg-danger-700",
                 link: "h-auto px-0 text-green-700 underline-offset-4 hover:underline",
-                // Topbar controls (menu toggle, notifications): compact,
-                // teal border at rest, green border and light green on hover.
+                // Topbar controls (menu toggle, search, notifications):
+                // compact, light border and small shadow.
                 toolbar:
-                    "rounded-(--radius-control) border-brand-teal/32 bg-white text-sm font-semibold text-ink hover:border-brand-green hover:bg-green-50",
+                    "rounded-(--radius-control) border border-border shadow-xs bg-white text-sm font-semibold text-ink",
             },
             size: {
                 // Charter: interactive controls are at least 40px high.

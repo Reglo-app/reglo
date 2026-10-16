@@ -18,7 +18,7 @@ export async function CurrentUserMenu() {
 export function CurrentUserMenuSkeleton() {
     return (
         <div aria-hidden="true">
-            <Skeleton className="h-8 w-8 rounded-(--radius-control) md:w-36" />
+            <Skeleton className="ml-2 h-10 w-10 rounded-md md:w-44" />
         </div>
     );
 }
