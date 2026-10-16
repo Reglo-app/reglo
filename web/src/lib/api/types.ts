@@ -34,9 +34,56 @@ export type DomainScore = {
     previousScore: number | null;
 };
 
+export type AlertKind =
+    "action_overdue" | "document_expiring" | "training_expiring";
+
+/** Something late or about to expire (home page "Alertes" block). */
+export type DashboardAlert = {
+    id: string;
+    kind: AlertKind;
+    title: string;
+    domain: DomainKey;
+    /** ISO 8601 date: deadline or expiry date. */
+    dueDate: string;
+};
+
+export type ActionStatus = "todo" | "in_progress" | "done";
+
+/** Action of the action plan (US-09). */
+export type ActionSummary = {
+    id: string;
+    title: string;
+    domain: DomainKey;
+    ownerName: string;
+    /** ISO 8601 date. */
+    dueDate: string;
+    status: ActionStatus;
+};
+
+/** Regulatory news item (US-15). */
+export type NewsSummary = {
+    id: string;
+    title: string;
+    domain: DomainKey;
+    /** ISO 8601 date. */
+    publishedAt: string;
+};
+
+/** `GET /api/dashboard`: everything the home page shows. */
 export type DashboardSummary = {
-    globalScore: number;
+    /** ISO 8601 date the summary was computed: "today" for due dates. */
+    generatedAt: string;
+    /** Global score from 0 to 100, or null if no diagnostic yet. */
+    globalScore: number | null;
     domains: DomainScore[];
     /** ISO 8601 date of the last diagnostic, or null if none yet. */
     lastDiagnosticAt: string | null;
+    /** At most 5, most urgent first. */
+    alerts: DashboardAlert[];
+    /** Next open actions, soonest first (at most 5). */
+    upcomingActions: ActionSummary[];
+    /** Share of actions closed on time over the last 12 months, 0 to 100. */
+    actionsOnTimeRate: number | null;
+    /** Latest news relevant to the organization (at most 3). */
+    latestNews: NewsSummary[];
 };

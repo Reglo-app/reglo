@@ -1,5 +1,4 @@
 import {
-    ClipboardCheck,
     FileCheck,
     GraduationCap,
     LayoutDashboard,
@@ -11,51 +10,42 @@ import {
 
 import { DOMAIN_KEYS, DOMAINS, type DomainKey } from "@/lib/domains";
 
+/** A sub-page of a nav item: shown under its parent, without icon. */
+export type NavChild = {
+    href: string;
+    label: string;
+};
+
 export type NavItem = {
     href: string;
     label: string;
     icon: LucideIcon;
     /** QHSE domain of the page, shown with its colour in the sidebar. */
     domain?: DomainKey;
-};
-
-export type NavGroup = {
-    label: string;
-    items: NavItem[];
+    /** Sub-pages, visible in the sidebar only inside this branch. */
+    children?: NavChild[];
 };
 
 export const HOME_ITEM: NavItem = {
     href: "/dashboard",
     label: "Tableau de bord",
     icon: LayoutDashboard,
+    children: [{ href: "/diagnostic", label: "Diagnostic" }],
 };
 
-export const NAV_GROUPS: NavGroup[] = [
-    {
-        label: "Pilotage",
-        items: [
-            HOME_ITEM,
-            { href: "/diagnostic", label: "Diagnostic", icon: ClipboardCheck },
-            { href: "/actions", label: "Plan d'actions", icon: ListChecks },
-        ],
-    },
-    {
-        label: "Domaines QHSE",
-        items: DOMAIN_KEYS.map((key) => ({
-            href: `/dashboard/${key}`,
-            label: DOMAINS[key].label,
-            icon: DOMAINS[key].icon,
-            domain: key,
-        })),
-    },
-    {
-        label: "Ressources",
-        items: [
-            { href: "/documents", label: "Justificatifs", icon: FileCheck },
-            { href: "/trainings", label: "Formations", icon: GraduationCap },
-            { href: "/news", label: "Veille réglementaire", icon: Newspaper },
-        ],
-    },
+/** Main navigation, in sidebar order (Paramètres is pinned at the bottom). */
+export const NAV_ITEMS: NavItem[] = [
+    HOME_ITEM,
+    ...DOMAIN_KEYS.map((key) => ({
+        href: `/dashboard/${key}`,
+        label: DOMAINS[key].label,
+        icon: DOMAINS[key].icon,
+        domain: key,
+    })),
+    { href: "/actions", label: "Plan d'actions", icon: ListChecks },
+    { href: "/documents", label: "Justificatifs", icon: FileCheck },
+    { href: "/trainings", label: "Formations", icon: GraduationCap },
+    { href: "/news", label: "Veille réglementaire", icon: Newspaper },
 ];
 
 export const SETTINGS_ITEM: NavItem = {
@@ -64,24 +54,35 @@ export const SETTINGS_ITEM: NavItem = {
     icon: Settings,
 };
 
-const ALL_ITEMS: NavItem[] = [
-    ...NAV_GROUPS.flatMap((group) => group.items),
-    SETTINGS_ITEM,
-];
+type Entry = NavChild & { item: NavItem; isChild: boolean };
 
-/** True when `pathname` is the item's page or one of its sub-pages. */
-export function isActive(item: NavItem, pathname: string): boolean {
-    return pathname === item.href || pathname.startsWith(`${item.href}/`);
+const ALL_ENTRIES: Entry[] = [...NAV_ITEMS, SETTINGS_ITEM].flatMap((item) => [
+    { href: item.href, label: item.label, item, isChild: false },
+    ...(item.children ?? []).map((child) => ({
+        ...child,
+        item,
+        isChild: true,
+    })),
+]);
+
+/** True when `pathname` is the page or one of its sub-pages. */
+export function isActive(entry: { href: string }, pathname: string): boolean {
+    return pathname === entry.href || pathname.startsWith(`${entry.href}/`);
 }
 
 /**
- * Nav item of the current page. The most specific match wins, so
- * `/dashboard/safety` is "Sécurité", not "Tableau de bord".
+ * Nav entry (item or child) of the current page. The most specific match
+ * wins, so `/dashboard/safety` is "Sécurité", not "Tableau de bord".
  */
-export function findNavItem(pathname: string): NavItem | undefined {
-    return ALL_ITEMS.filter((item) => isActive(item, pathname)).sort(
+export function findNavEntry(pathname: string): Entry | undefined {
+    return ALL_ENTRIES.filter((entry) => isActive(entry, pathname)).sort(
         (a, b) => b.href.length - a.href.length,
     )[0];
+}
+
+/** The top-level item whose branch holds the current page. */
+export function findNavItem(pathname: string): NavItem | undefined {
+    return findNavEntry(pathname)?.item;
 }
 
 export type Crumb = {
@@ -92,22 +93,28 @@ export type Crumb = {
 };
 
 /**
- * Breadcrumb for a path: home, then the section, then any detail segment.
- * The last crumb is the current page.
+ * Breadcrumb for a path: home, the section, the sub-page if any, then any
+ * detail segment. The last crumb is the current page.
  */
 export function getBreadcrumb(pathname: string): Crumb[] {
     const crumbs: Crumb[] = [HOME_ITEM];
-    const section = findNavItem(pathname);
-
-    if (section && section !== HOME_ITEM) {
-        crumbs.push(section);
+    const entry = findNavEntry(pathname);
+    if (!entry) {
+        return crumbs;
     }
 
-    if (section && pathname !== section.href) {
-        const detail = pathname.slice(section.href.length + 1).split("/")[0];
+    if (entry.item !== HOME_ITEM) {
+        crumbs.push(entry.item);
+    }
+    if (entry.isChild) {
+        crumbs.push({ label: entry.label, href: entry.href });
+    }
+
+    if (pathname !== entry.href) {
+        const detail = pathname.slice(entry.href.length + 1).split("/")[0];
         crumbs.push({
             label: decodeURIComponent(detail),
-            href: `${section.href}/${detail}`,
+            href: `${entry.href}/${detail}`,
         });
     }
 
