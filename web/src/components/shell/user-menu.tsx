@@ -36,11 +36,11 @@ export function UserMenu({
         <DropdownMenu>
             <DropdownMenuTrigger
                 aria-label={`Menu de ${fullName}`}
-                className="flex items-center gap-2 rounded-(--radius-control) border border-brand-teal/32 bg-white py-[5px] pr-2.5 pl-[5px] text-[13px] font-semibold text-ink transition-colors hover:border-brand-green hover:bg-green-50 aria-expanded:border-brand-green aria-expanded:bg-green-50"
+                className="flex items-center gap-2 rounded-(--radius-control) border border-brand-teal/32 bg-white py-[5px] pr-2.5 pl-[5px] text-sm font-semibold text-ink transition-colors hover:border-brand-green hover:bg-green-50 aria-expanded:border-brand-green aria-expanded:bg-green-50"
             >
                 <span
                     aria-hidden="true"
-                    className="flex size-[22px] items-center justify-center rounded-sm bg-brand-blue text-[11px] font-semibold text-brand-teal"
+                    className="flex size-6 items-center justify-center rounded-sm bg-brand-blue text-xs font-semibold text-brand-teal"
                 >
                     {initials(fullName)}
                 </span>

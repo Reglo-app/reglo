@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, PanelLeft, Search } from "lucide-react";
+import { Bell, PanelLeft } from "lucide-react";
 
 import { AppBreadcrumb } from "@/components/shell/app-breadcrumb";
+import { SearchDialog } from "@/components/shell/search-dialog";
 import { SidebarNav } from "@/components/shell/sidebar-nav";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
     Sheet,
     SheetContent,
@@ -107,23 +107,7 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                     <AppBreadcrumb />
 
                     <div className="ml-auto flex items-center gap-1 sm:gap-2">
-                        {/* Search is a placeholder until the search feature exists. */}
-                        <form
-                            role="search"
-                            className="relative hidden md:block"
-                            onSubmit={(event) => event.preventDefault()}
-                        >
-                            <Search
-                                aria-hidden="true"
-                                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-muted"
-                            />
-                            <Input
-                                type="search"
-                                aria-label="Rechercher"
-                                placeholder="Rechercher…"
-                                className="h-auto w-64 rounded-(--radius-control) border-brand-teal/32 bg-white py-[7px] pr-3 pl-9 text-[13px] leading-[18px] font-semibold placeholder:font-normal hover:border-brand-green focus-visible:border-brand-green"
-                            />
-                        </form>
+                        <SearchDialog />
                         <Button
                             variant="toolbar"
                             size="toolbar-icon"
