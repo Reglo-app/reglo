@@ -36,7 +36,7 @@ export function UserMenu({
         <DropdownMenu>
             <DropdownMenuTrigger
                 aria-label={`Menu de ${fullName}`}
-                className="flex min-h-11 items-center gap-3 rounded-full py-1 pr-2 pl-1 transition-colors hover:bg-white aria-expanded:bg-white"
+                className="flex min-h-11 items-center gap-3 rounded-full py-1 pr-2 pl-1 transition-[background-color,box-shadow] hover:bg-white hover:shadow-raised aria-expanded:bg-white aria-expanded:shadow-raised"
             >
                 <span
                     aria-hidden="true"

@@ -88,6 +88,7 @@ export type Crumb = {
     label: string;
     href: string;
     icon?: LucideIcon;
+    domain?: DomainKey;
 };
 
 /**

@@ -53,7 +53,8 @@ function BreadcrumbLink({
         <Comp
             data-slot="breadcrumb-link"
             className={cn(
-                "inline-flex min-h-11 items-center gap-1.5 rounded-sm px-1 transition-colors hover:text-ink [&_svg]:size-4 [&_svg]:shrink-0",
+                // Shopify-like hover: the link lifts on a white, raised background.
+                "inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 transition-[color,background-color,box-shadow] hover:bg-white hover:text-ink hover:shadow-raised active:shadow-pressed [&_svg]:size-4 [&_svg]:shrink-0",
                 className,
             )}
             {...props}
@@ -67,7 +68,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
             data-slot="breadcrumb-page"
             aria-current="page"
             className={cn(
-                "inline-flex min-h-11 items-center gap-1.5 px-1 font-medium text-ink [&_svg]:size-4 [&_svg]:shrink-0",
+                "inline-flex min-h-11 items-center gap-1.5 px-2 font-medium text-ink [&_svg]:size-4 [&_svg]:shrink-0",
                 className,
             )}
             {...props}

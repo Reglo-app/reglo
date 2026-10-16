@@ -11,15 +11,8 @@ import {
     findNavItem,
     type NavItem,
 } from "@/lib/navigation";
-import type { DomainKey } from "@/lib/domains";
+import { DOMAIN_ICON_CLASSES } from "@/lib/domains";
 import { cn } from "@/lib/utils";
-
-const DOMAIN_DOT_CLASSES: Record<DomainKey, string> = {
-    quality: "bg-quality",
-    hygiene: "bg-hygiene",
-    safety: "bg-safety",
-    environment: "bg-environment",
-};
 
 type SidebarNavProps = {
     /** Icons only (desktop collapsed sidebar). */
@@ -59,19 +52,15 @@ function NavLink({
                 aria-hidden="true"
                 className={cn(
                     "size-5 shrink-0",
-                    active ? "text-green-700" : "text-ink-muted",
+                    // QHSE pillars keep their colour; other icons follow the state.
+                    item.domain
+                        ? DOMAIN_ICON_CLASSES[item.domain]
+                        : active
+                          ? "text-green-700"
+                          : "text-ink-muted",
                 )}
             />
             <span className={cn(collapsed && "sr-only")}>{item.label}</span>
-            {item.domain && !collapsed && (
-                <span
-                    aria-hidden="true"
-                    className={cn(
-                        "ml-auto size-2.5 shrink-0 rounded-full",
-                        DOMAIN_DOT_CLASSES[item.domain],
-                    )}
-                />
-            )}
         </Link>
     );
 }

@@ -29,6 +29,18 @@ export const DOMAINS: Record<DomainKey, Domain> = {
     environment: { key: "environment", label: "Environnement", icon: Leaf },
 };
 
+/**
+ * Icon colours of each domain: the outline stays dark enough to be seen on
+ * white, the fill carries the domain colour (charter: blue and yellow are
+ * fills, never strokes or text on white).
+ */
+export const DOMAIN_ICON_CLASSES: Record<DomainKey, string> = {
+    quality: "text-brand-teal fill-quality/20",
+    hygiene: "text-blue-700 fill-hygiene",
+    safety: "text-brand-teal fill-safety",
+    environment: "text-green-700 fill-environment/45",
+};
+
 export function isDomainKey(value: unknown): value is DomainKey {
     return (
         typeof value === "string" &&

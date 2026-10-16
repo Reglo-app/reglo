@@ -12,6 +12,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { DOMAIN_ICON_CLASSES } from "@/lib/domains";
 import { getBreadcrumb } from "@/lib/navigation";
 
 /** `[icon] Section / [icon] Page / Detail`, built from the current path. */
@@ -26,7 +27,15 @@ export function AppBreadcrumb() {
                     const isLast = index === crumbs.length - 1;
                     const content = (
                         <>
-                            {Icon && <Icon aria-hidden="true" />}
+                            {Icon && (
+                                <Icon
+                                    aria-hidden="true"
+                                    className={
+                                        crumb.domain &&
+                                        DOMAIN_ICON_CLASSES[crumb.domain]
+                                    }
+                                />
+                            )}
                             <span className="truncate">{crumb.label}</span>
                         </>
                     );
