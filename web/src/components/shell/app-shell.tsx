@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, PanelLeft } from "lucide-react";
+import { Bell, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 
 import { AppBreadcrumb } from "@/components/shell/app-breadcrumb";
 import { SearchDialog } from "@/components/shell/search-dialog";
@@ -88,7 +88,7 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                         aria-expanded={mobileOpen}
                         onClick={() => setMobileOpen(true)}
                     >
-                        <PanelLeft />
+                        <PanelLeftOpen />
                     </Button>
                     <Button
                         variant="toolbar"
@@ -101,7 +101,7 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                         aria-expanded={!collapsed}
                         onClick={toggleCollapsed}
                     >
-                        <PanelLeft />
+                        {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
                     </Button>
 
                     <AppBreadcrumb />

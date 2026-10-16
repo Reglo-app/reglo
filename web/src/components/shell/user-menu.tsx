@@ -34,25 +34,17 @@ export function UserMenu({
 }: UserMenuProps) {
     return (
         <DropdownMenu>
-            {/* Different from the bordered topbar controls: no frame, a
-                larger avatar and two lines (person, then organization). */}
+            {/* Round avatar and chevron only; name, role and organization
+                are in the menu. */}
             <DropdownMenuTrigger
                 aria-label={`Menu de ${fullName}, ${organizationName}`}
-                className="ml-1 flex items-center gap-2.5 rounded-md py-1 pr-2 pl-1 text-left transition-colors hover:bg-green-50 aria-expanded:bg-green-50 sm:ml-2 sm:border-l sm:border-border sm:pl-3"
+                className="ml-1 flex items-center gap-1.5 rounded-full p-0.5 pr-1.5 transition-colors hover:bg-green-50 aria-expanded:bg-green-50 sm:ml-2"
             >
                 <span
                     aria-hidden="true"
-                    className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-teal text-sm font-semibold text-white"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-teal text-xs font-semibold text-white"
                 >
                     {initials(fullName)}
-                </span>
-                <span className="hidden leading-tight md:block">
-                    <span className="block text-sm font-semibold text-ink">
-                        {fullName}
-                    </span>
-                    <span className="block max-w-40 truncate text-xs text-ink-muted">
-                        {organizationName}
-                    </span>
                 </span>
                 <ChevronDown
                     aria-hidden="true"

@@ -86,7 +86,8 @@ function BreadcrumbSeparator({
             data-slot="breadcrumb-separator"
             role="presentation"
             aria-hidden="true"
-            className={cn("px-0.5 text-border-strong", className)}
+            // 2px larger than the links so the "/" is easier to see.
+            className={cn("px-0.5 text-base text-border-strong", className)}
             {...props}
         >
             {children ?? "/"}
