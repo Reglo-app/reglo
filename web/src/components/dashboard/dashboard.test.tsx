@@ -20,15 +20,15 @@ describe("ScoreOverview", () => {
         render(<ScoreOverview summary={summary} />);
         expect(screen.getByText("Score global")).toBeInTheDocument();
         expect(
-            screen.getByRole("img", {
-                name: "Score global : 64 sur 100. Qualité : 72. Hygiène-Santé : 58. Sécurité : 49. Environnement : 77",
-            }),
+            screen.getByRole("img", { name: "Score global : 64 sur 100" }),
         ).toBeInTheDocument();
         expect(screen.getByRole("link", { name: /Sécurité/ })).toHaveAttribute(
             "href",
             "/dashboard/safety",
         );
         expect(screen.getAllByRole("link")).toHaveLength(4);
+        // No diagnostic date in this block.
+        expect(screen.queryByText(/oct\. 2026/)).not.toBeInTheDocument();
     });
 
     it("says the trend in words, not only with colour", () => {

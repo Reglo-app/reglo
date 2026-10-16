@@ -12,8 +12,7 @@ import { BlockHeader } from "@/components/dashboard/block";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { DashboardSummary, DomainScore } from "@/lib/api";
-import { DOMAIN_ICON_CLASSES, DOMAINS, type DomainKey } from "@/lib/domains";
-import { formatDate } from "@/lib/format";
+import { DOMAIN_ICON_CLASSES, DOMAINS } from "@/lib/domains";
 import { cn } from "@/lib/utils";
 
 /** Words for a score, so the level is never given by a number alone. */
@@ -56,125 +55,49 @@ function Trend({
     );
 }
 
-// --- Concentric arcs -------------------------------------------------------
+// --- Global score ring -----------------------------------------------------
 
-/** Arcs cover 270°, open at the bottom (inspiration captures 6 and 7). */
-const ARC_SWEEP = 0.75;
-/** Rotation so the arc starts bottom-left and ends bottom-right. */
-const ARC_START = 135;
-/** One gradient on the page: the global arc. */
-const GLOBAL_GRADIENT_ID = "score-global-gradient";
+const RING_RADIUS = 42;
+const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
 
-const ARC_CLASSES: Record<DomainKey, string> = {
-    quality: "stroke-quality",
-    hygiene: "stroke-hygiene",
-    safety: "stroke-safety",
-    environment: "stroke-environment",
-};
-
-function Arc({
-    radius,
-    width,
-    score,
-    className,
-    stroke,
-}: {
-    radius: number;
-    width: number;
-    score: number;
-    className?: string;
-    stroke?: string;
-}) {
-    const length = 2 * Math.PI * radius;
-    const track = length * ARC_SWEEP;
-    const value = (track * Math.min(100, Math.max(0, score))) / 100;
-    const common = {
-        cx: 100,
-        cy: 100,
-        r: radius,
-        fill: "none",
-        strokeWidth: width,
-        strokeLinecap: "round" as const,
-        transform: `rotate(${ARC_START} 100 100)`,
-    };
-    return (
-        <>
-            <circle
-                {...common}
-                strokeDasharray={`${track} ${length}`}
-                className="stroke-teal-50"
-            />
-            {value > 0 && (
-                <circle
-                    {...common}
-                    strokeDasharray={`${value} ${length}`}
-                    stroke={stroke}
-                    className={className}
-                />
-            )}
-        </>
-    );
-}
-
-/**
- * Big chart: the global score on the outer arc (brand gradient), one inner
- * arc per QHSE domain in its colour, the global score in the middle.
- */
-function ScoreRings({
-    globalScore,
-    domains,
-}: {
-    globalScore: number;
-    domains: DomainScore[];
-}) {
-    const label = [
-        `Score global : ${globalScore} sur 100`,
-        ...domains.map((d) => `${DOMAINS[d.domain].label} : ${d.score}`),
-    ].join(". ");
-
+/** Progress circle drawn in white, the score in the middle. */
+function ScoreRing({ score }: { score: number }) {
+    const clamped = Math.min(100, Math.max(0, score));
     return (
         <div
             role="img"
-            aria-label={label}
-            className="relative size-60 shrink-0"
+            aria-label={`Score global : ${score} sur 100`}
+            className="relative size-40 shrink-0"
         >
-            <svg viewBox="0 0 200 200" className="size-full">
-                <defs>
-                    <linearGradient
-                        id={GLOBAL_GRADIENT_ID}
-                        x1="0"
-                        y1="0"
-                        x2="1"
-                        y2="0"
-                    >
-                        <stop offset="0" stopColor="var(--color-teal-700)" />
-                        <stop offset="1" stopColor="var(--color-brand-green)" />
-                    </linearGradient>
-                </defs>
-                <Arc
-                    radius={90}
-                    width={12}
-                    score={globalScore}
-                    stroke={`url(#${GLOBAL_GRADIENT_ID})`}
+            <svg viewBox="0 0 100 100" className="size-full -rotate-90">
+                <circle
+                    cx="50"
+                    cy="50"
+                    r={RING_RADIUS}
+                    fill="none"
+                    strokeWidth="8"
+                    className="stroke-white/25"
                 />
-                {domains.map((d, index) => (
-                    <Arc
-                        key={d.domain}
-                        radius={73 - index * 10}
-                        width={7}
-                        score={d.score}
-                        className={ARC_CLASSES[d.domain]}
-                    />
-                ))}
+                <circle
+                    cx="50"
+                    cy="50"
+                    r={RING_RADIUS}
+                    fill="none"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={RING_LENGTH}
+                    strokeDashoffset={RING_LENGTH * (1 - clamped / 100)}
+                    className="stroke-white"
+                />
             </svg>
             <span
                 aria-hidden="true"
                 className="absolute inset-0 flex flex-col items-center justify-center"
             >
-                <span className="text-4xl leading-none font-semibold text-ink">
-                    {globalScore}
+                <span className="text-5xl leading-none font-semibold">
+                    {score}
                 </span>
-                <span className="text-xs text-ink-muted">/ 100</span>
+                <span className="text-sm text-white/85">/ 100</span>
             </span>
         </div>
     );
@@ -217,7 +140,7 @@ function DomainRow(score: DomainScore) {
     );
 }
 
-/** Block 1, "Où en suis-je ?": rings chart on the left, scores on the right. */
+/** Block 1, "Où en suis-je ?": global score ring on the left, domains on the right. */
 export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
     if (summary.globalScore === null) {
         return (
@@ -236,61 +159,55 @@ export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
     }
 
     const globalScore = summary.globalScore;
+    const delta =
+        summary.previousGlobalScore === null
+            ? null
+            : globalScore - summary.previousGlobalScore;
 
     return (
         <Card>
-            <BlockHeader
-                icon={Gauge}
-                title="Score QHSE"
-                extra={
-                    summary.lastDiagnosticAt && (
-                        <span className="text-sm font-normal text-ink-muted">
-                            · {formatDate(summary.lastDiagnosticAt)}
-                        </span>
-                    )
-                }
-            />
-            <CardContent className="grid items-center gap-6 md:grid-cols-[auto_1fr] md:gap-10">
-                <div className="flex justify-center">
-                    <ScoreRings
-                        globalScore={globalScore}
-                        domains={summary.domains}
+            <BlockHeader icon={Gauge} title="Score QHSE" />
+            <CardContent className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+                {/* Global score: ring on the brand gradient. */}
+                <div className="relative isolate flex flex-col items-center justify-center gap-3 overflow-hidden rounded-lg bg-brand-gradient p-6 text-white">
+                    <span
+                        aria-hidden="true"
+                        className="absolute -top-14 -right-14 -z-10 size-44 rounded-full bg-white/10"
                     />
+                    <span className="text-sm font-semibold">Score global</span>
+                    <ScoreRing score={globalScore} />
+                    <span className="rounded-full bg-white/20 px-3 py-1 text-sm font-semibold">
+                        {scoreLevel(globalScore)}
+                    </span>
+                    {delta !== null && (
+                        <span className="flex items-center gap-1 text-sm font-medium">
+                            {delta >= 0 ? (
+                                <TrendingUp
+                                    aria-hidden="true"
+                                    className="size-4"
+                                />
+                            ) : (
+                                <TrendingDown
+                                    aria-hidden="true"
+                                    className="size-4"
+                                />
+                            )}
+                            {delta >= 0 ? "+" : "−"}
+                            {Math.abs(delta)}
+                            <span className="sr-only">
+                                {" "}
+                                points depuis le diagnostic précédent
+                            </span>
+                        </span>
+                    )}
                 </div>
 
-                <div className="flex flex-col gap-2">
-                    {/* Global score row: highlighted with the brand gradient. */}
-                    <div className="flex items-center gap-3 rounded-lg bg-brand-gradient px-3 py-3 text-white">
-                        <Gauge aria-hidden="true" className="size-5 shrink-0" />
-                        <span className="flex-1 text-sm font-semibold">
-                            Score global
-                        </span>
-                        <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold">
-                            {scoreLevel(globalScore)}
-                        </span>
-                        <span className="w-10 text-right text-2xl font-semibold">
-                            {globalScore}
-                            <span className="sr-only"> sur 100</span>
-                        </span>
-                        <span className="w-4" aria-hidden="true" />
-                    </div>
-                    {summary.previousGlobalScore !== null && (
-                        <p className="px-3 text-xs text-ink-muted">
-                            {globalScore - summary.previousGlobalScore >= 0
-                                ? "+"
-                                : "−"}
-                            {Math.abs(
-                                globalScore - summary.previousGlobalScore,
-                            )}{" "}
-                            points depuis le diagnostic précédent
-                        </p>
-                    )}
-                    <ul className="flex flex-col">
-                        {summary.domains.map((score) => (
-                            <DomainRow key={score.domain} {...score} />
-                        ))}
-                    </ul>
-                </div>
+                {/* Detailed scores, one row per QHSE domain. */}
+                <ul className="flex flex-col justify-center divide-y divide-border">
+                    {summary.domains.map((score) => (
+                        <DomainRow key={score.domain} {...score} />
+                    ))}
+                </ul>
             </CardContent>
         </Card>
     );
