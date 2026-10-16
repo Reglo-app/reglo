@@ -121,11 +121,11 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                                 type="search"
                                 aria-label="Rechercher"
                                 placeholder="Rechercher…"
-                                className="w-64 rounded-full border-border bg-white pl-10"
+                                className="w-64 border-border bg-white pl-10"
                             />
                         </form>
                         <Button
-                            variant="ghost"
+                            variant="outline"
                             size="icon"
                             aria-label="Notifications"
                         >
@@ -138,7 +138,8 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                 <main
                     id="main-content"
                     tabIndex={-1}
-                    className="mx-auto w-full max-w-[1200px] flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
+                    // Left-aligned next to the sidebar, folded or not.
+                    className="w-full max-w-[1200px] flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
                 >
                     {children}
                 </main>

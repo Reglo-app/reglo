@@ -24,10 +24,10 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 describe("Button", () => {
-    it("uses the primary teal style and a 44px height by default", () => {
+    it("uses the primary teal style and a 40px height by default", () => {
         render(<Button>Enregistrer</Button>);
         const button = screen.getByRole("button", { name: "Enregistrer" });
-        expect(button).toHaveClass("bg-brand-teal", "text-white", "h-11");
+        expect(button).toHaveClass("bg-brand-teal", "text-white", "h-10");
     });
 
     it("renders the highlight variant with teal text on yellow", () => {
@@ -42,7 +42,7 @@ describe("Button", () => {
         render(<Button className="h-12">Grand</Button>);
         const button = screen.getByRole("button");
         expect(button).toHaveClass("h-12");
-        expect(button).not.toHaveClass("h-11");
+        expect(button).not.toHaveClass("h-10");
     });
 });
 
@@ -56,7 +56,7 @@ describe("Input", () => {
         );
         expect(screen.getByLabelText("Adresse e-mail")).toHaveClass(
             "border-border-strong",
-            "h-11",
+            "h-10",
         );
     });
 });

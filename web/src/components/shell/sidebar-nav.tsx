@@ -41,7 +41,7 @@ function NavLink({
             aria-current={active ? "page" : undefined}
             title={collapsed ? item.label : undefined}
             className={cn(
-                "flex min-h-11 items-center gap-3 rounded-md px-3 text-base font-medium transition-colors",
+                "flex min-h-10 items-center gap-3 rounded-md px-3 text-base font-medium transition-colors",
                 active
                     ? "bg-green-50 text-ink"
                     : "text-ink-muted hover:bg-surface-subtle hover:text-ink",
@@ -67,12 +67,12 @@ function NavLink({
 
 export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
     return (
-        <div className="flex h-full flex-col gap-6 overflow-y-auto px-3 py-4">
+        <div className="flex h-full flex-col gap-4 py-4">
             <Link
                 href={HOME_ITEM.href}
                 onClick={onNavigate}
                 className={cn(
-                    "flex min-h-11 items-center gap-2 rounded-md px-2",
+                    "mx-3 flex min-h-10 items-center gap-2 rounded-md px-2",
                     collapsed && "justify-center px-0",
                 )}
             >
@@ -96,33 +96,36 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
 
             <nav
                 aria-label="Navigation principale"
-                className="flex flex-1 flex-col gap-6"
+                className="flex min-h-0 flex-1 flex-col"
             >
-                {NAV_GROUPS.map((group) => (
-                    <div key={group.label} className="flex flex-col gap-1">
-                        <p
-                            className={cn(
-                                "px-3 pb-1 text-xs font-medium tracking-wide text-ink-muted uppercase",
-                                collapsed && "sr-only",
-                            )}
-                        >
-                            {group.label}
-                        </p>
-                        <ul className="flex flex-col gap-1">
-                            {group.items.map((item) => (
-                                <li key={item.href}>
-                                    <NavLink
-                                        item={item}
-                                        collapsed={collapsed}
-                                        onNavigate={onNavigate}
-                                    />
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                ))}
+                {/* Only the sections scroll; Paramètres stays at the bottom. */}
+                <div className="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto px-3">
+                    {NAV_GROUPS.map((group) => (
+                        <div key={group.label} className="flex flex-col gap-1">
+                            <p
+                                className={cn(
+                                    "px-3 pb-1 text-xs font-medium tracking-wide text-ink-muted uppercase",
+                                    collapsed && "sr-only",
+                                )}
+                            >
+                                {group.label}
+                            </p>
+                            <ul className="flex flex-col gap-1">
+                                {group.items.map((item) => (
+                                    <li key={item.href}>
+                                        <NavLink
+                                            item={item}
+                                            collapsed={collapsed}
+                                            onNavigate={onNavigate}
+                                        />
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
 
-                <ul className="mt-auto flex flex-col gap-1">
+                <ul className="mx-3 mt-2 flex flex-col gap-1 border-t border-border pt-2">
                     <li>
                         <NavLink
                             item={SETTINGS_ITEM}

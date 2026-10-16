@@ -42,9 +42,9 @@
     --color-sidebar-border: var(--color-border);
     --color-sidebar-ring: var(--color-focus-ring);
 
-    --radius-2xl: 28px;
-    --radius-3xl: 32px;
-    --radius-4xl: 40px;
+    --radius-2xl: 20px;
+    --radius-3xl: 24px;
+    --radius-4xl: 32px;
 }
 
 @layer base {

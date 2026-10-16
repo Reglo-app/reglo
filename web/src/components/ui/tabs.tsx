@@ -25,7 +25,7 @@ const tabsListVariants = cva(
         variants: {
             variant: {
                 // Pill tabs on a white track.
-                default: "gap-1 rounded-full border border-border bg-white p-1",
+                default: "gap-1 rounded-lg border border-border bg-white p-1",
                 // Underlined tabs. Each trigger can set its accent with
                 // `[--tab-accent:var(--color-quality)]`.
                 line: "gap-2 border-b border-border",
@@ -61,9 +61,9 @@ function TabsTrigger({
         <TabsPrimitive.Trigger
             data-slot="tabs-trigger"
             className={cn(
-                "relative inline-flex h-11 shrink-0 items-center justify-center gap-2 px-4 text-base font-medium whitespace-nowrap text-ink-muted transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
+                "relative inline-flex h-10 shrink-0 items-center justify-center gap-2 px-4 text-base font-medium whitespace-nowrap text-ink-muted transition-colors hover:text-ink disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5",
                 // default variant
-                "group-data-[variant=default]/tabs-list:rounded-full group-data-[variant=default]/tabs-list:data-[state=active]:bg-brand-teal group-data-[variant=default]/tabs-list:data-[state=active]:text-white group-data-[variant=default]/tabs-list:data-[state=active]:shadow-raised-strong",
+                "group-data-[variant=default]/tabs-list:rounded-md group-data-[variant=default]/tabs-list:data-[state=active]:bg-brand-teal group-data-[variant=default]/tabs-list:data-[state=active]:text-white",
                 // line variant
                 "group-data-[variant=line]/tabs-list:data-[state=active]:text-ink after:absolute after:inset-x-2 after:bottom-0 after:h-1 after:rounded-full after:bg-(--tab-accent,var(--color-brand-teal)) after:opacity-0 group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100",
                 className,
