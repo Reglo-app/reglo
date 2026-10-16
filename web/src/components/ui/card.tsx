@@ -11,7 +11,7 @@ const cardVariants = cva(
         variants: {
             tone: {
                 default: "border border-border bg-white text-ink",
-                brand: "bg-brand-teal text-white",
+                brand: "bg-brand-gradient text-white",
                 quality: "bg-quality-50 text-ink",
                 hygiene: "bg-hygiene-50 text-ink",
                 safety: "bg-safety-50 text-ink",

@@ -67,6 +67,8 @@ export type NewsSummary = {
     domain: DomainKey;
     /** ISO 8601 date. */
     publishedAt: string;
+    /** Cover image URL, or null (a domain-coloured cover is shown). */
+    imageUrl: string | null;
 };
 
 /** `GET /api/dashboard`: everything the home page shows. */

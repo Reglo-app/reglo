@@ -1,6 +1,8 @@
+import Image from "next/image";
 import { BellRing, ListChecks, Newspaper } from "lucide-react";
 
 import { BlockHeader, EmptyLine } from "@/components/dashboard/block";
+import { DomainBadge } from "@/components/domain-badge";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type {
@@ -138,6 +140,42 @@ export function UpcomingActionsCard({
     );
 }
 
+const COVER_TONES: Record<DomainKey, string> = {
+    quality: "bg-quality-50",
+    hygiene: "bg-hygiene-50",
+    safety: "bg-safety-50",
+    environment: "bg-environment-50",
+};
+
+/** Article cover: its image, or a domain-coloured block with the icon. */
+function NewsCover({ item }: { item: NewsSummary }) {
+    if (item.imageUrl) {
+        return (
+            <Image
+                src={item.imageUrl}
+                alt=""
+                fill
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="object-cover"
+            />
+        );
+    }
+    const Icon = DOMAINS[item.domain].icon;
+    return (
+        <div
+            className={cn(
+                "flex size-full items-center justify-center",
+                COVER_TONES[item.domain],
+            )}
+        >
+            <Icon
+                aria-hidden="true"
+                className={cn("size-10", DOMAIN_ICON_CLASSES[item.domain])}
+            />
+        </div>
+    );
+}
+
 /** Block 4, "Qu'est-ce qui change pour moi ?": latest regulatory news. */
 export function NewsCard({ news }: { news: NewsSummary[] }) {
     return (
@@ -151,19 +189,24 @@ export function NewsCard({ news }: { news: NewsSummary[] }) {
                 {news.length === 0 ? (
                     <EmptyLine>Aucune nouveauté.</EmptyLine>
                 ) : (
-                    <ul className="divide-y divide-border">
+                    <ul className="grid gap-4 md:grid-cols-3">
                         {news.slice(0, 3).map((item) => (
-                            <li
-                                key={item.id}
-                                className="flex items-center gap-3 py-2.5"
-                            >
-                                <DomainIcon domain={item.domain} />
-                                <p className="min-w-0 flex-1 truncate text-sm text-ink">
-                                    {item.title}
-                                </p>
-                                <span className="shrink-0 text-xs text-ink-muted">
-                                    {formatDate(item.publishedAt)}
-                                </span>
+                            <li key={item.id}>
+                                <article className="flex h-full flex-col gap-3">
+                                    <div className="relative aspect-video overflow-hidden rounded-lg bg-surface-subtle">
+                                        <NewsCover item={item} />
+                                        <DomainBadge
+                                            domain={item.domain}
+                                            className="absolute top-3 left-3 bg-white"
+                                        />
+                                    </div>
+                                    <h3 className="line-clamp-2 text-sm font-semibold text-ink">
+                                        {item.title}
+                                    </h3>
+                                    <p className="mt-auto text-xs text-ink-muted">
+                                        {formatDate(item.publishedAt)}
+                                    </p>
+                                </article>
                             </li>
                         ))}
                     </ul>

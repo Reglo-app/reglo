@@ -27,15 +27,15 @@ async function DashboardContent() {
     return (
         <div className="flex flex-col gap-4">
             <ScoreOverview summary={summary} />
-            <div className="grid gap-4 xl:grid-cols-3">
+            <div className="grid gap-4 lg:grid-cols-2">
                 <AlertsCard alerts={summary.alerts} today={today} />
                 <UpcomingActionsCard
                     actions={summary.upcomingActions}
                     onTimeRate={summary.actionsOnTimeRate}
                     today={today}
                 />
-                <NewsCard news={summary.latestNews} />
             </div>
+            <NewsCard news={summary.latestNews} />
         </div>
     );
 }
@@ -45,11 +45,11 @@ function DashboardSkeleton() {
         <div className="flex flex-col gap-4" aria-busy="true">
             <span className="sr-only">Chargement…</span>
             <Skeleton className="h-44 rounded-lg" />
-            <div className="grid gap-4 xl:grid-cols-3">
-                <Skeleton className="h-64 rounded-lg" />
+            <div className="grid gap-4 lg:grid-cols-2">
                 <Skeleton className="h-64 rounded-lg" />
                 <Skeleton className="h-64 rounded-lg" />
             </div>
+            <Skeleton className="h-80 rounded-lg" />
         </div>
     );
 }

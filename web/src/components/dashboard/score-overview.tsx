@@ -47,7 +47,7 @@ function DomainTile(score: DomainScore) {
     return (
         <Link
             href={`/dashboard/${score.domain}`}
-            className="flex flex-col gap-2 rounded-lg border border-border bg-white p-4 transition-colors hover:border-border-strong hover:bg-green-50"
+            className="flex flex-col justify-between gap-2 rounded-lg border border-border bg-white p-4 transition-colors hover:border-border-strong hover:bg-green-50"
         >
             <span className="flex items-center gap-2 text-sm font-medium text-ink">
                 <Icon
@@ -64,6 +64,49 @@ function DomainTile(score: DomainScore) {
                 <Trend {...score} />
             </span>
         </Link>
+    );
+}
+
+const RING_RADIUS = 42;
+const RING_LENGTH = 2 * Math.PI * RING_RADIUS;
+
+/** Progress circle with the score in the middle (drawn in white). */
+function ScoreRing({ score }: { score: number }) {
+    const clamped = Math.min(100, Math.max(0, score));
+    return (
+        <div
+            role="img"
+            aria-label={`Score global : ${score} sur 100`}
+            className="relative size-24 shrink-0"
+        >
+            <svg viewBox="0 0 100 100" className="size-full -rotate-90">
+                <circle
+                    cx="50"
+                    cy="50"
+                    r={RING_RADIUS}
+                    fill="none"
+                    strokeWidth="9"
+                    className="stroke-white/25"
+                />
+                <circle
+                    cx="50"
+                    cy="50"
+                    r={RING_RADIUS}
+                    fill="none"
+                    strokeWidth="9"
+                    strokeLinecap="round"
+                    strokeDasharray={RING_LENGTH}
+                    strokeDashoffset={RING_LENGTH * (1 - clamped / 100)}
+                    className="stroke-white"
+                />
+            </svg>
+            <span
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center justify-center text-3xl font-semibold"
+            >
+                {score}
+            </span>
+        </div>
     );
 }
 
@@ -98,12 +141,11 @@ export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
                     )
                 }
             />
-            <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-                <div className="flex flex-col justify-between gap-2 rounded-lg bg-brand-teal p-4 text-white sm:col-span-2 lg:col-span-1">
-                    <span className="text-sm">Score global</span>
-                    <span className="text-4xl font-semibold">
-                        {summary.globalScore}
-                        <span className="sr-only"> sur 100</span>
+            <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+                <div className="flex items-center gap-4 rounded-lg bg-brand-gradient p-4 text-white sm:col-span-2">
+                    <ScoreRing score={summary.globalScore} />
+                    <span className="text-base font-semibold">
+                        Score global
                     </span>
                 </div>
                 {summary.domains.map((score) => (

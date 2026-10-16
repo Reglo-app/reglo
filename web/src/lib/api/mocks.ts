@@ -1,4 +1,5 @@
 // Fictitious data used while the API endpoints do not exist yet.
+// News covers are generated placeholders in public/mock/news/.
 // No real person or company: names are invented.
 
 import type { CurrentUser, DashboardSummary } from "./types";
@@ -96,18 +97,21 @@ export const mockDashboardSummary: DashboardSummary = {
             title: "Vérifications périodiques des équipements de travail : nouvel arrêté",
             domain: "safety",
             publishedAt: "2026-10-12T00:00:00.000Z",
+            imageUrl: "/mock/news/safety.jpg",
         },
         {
             id: "news-2",
             title: "Tri à la source des biodéchets : rappel des obligations",
             domain: "environment",
             publishedAt: "2026-10-08T00:00:00.000Z",
+            imageUrl: "/mock/news/environment.jpg",
         },
         {
             id: "news-3",
             title: "Réclamations clients : délais de réponse recommandés",
             domain: "quality",
             publishedAt: "2026-10-02T00:00:00.000Z",
+            imageUrl: "/mock/news/quality.jpg",
         },
     ],
 };

@@ -76,8 +76,9 @@ function NavBranch({
 
             {item.children && inBranch && !collapsed && (
                 // Thin line from under the parent icon (its centre is 12px
-                // padding + 10px = 22px from the left), along the sub-pages.
-                <ul className="mt-1 ml-[21px] flex flex-col gap-1 border-l border-border pl-1">
+                // padding + 10px = 22px from the left), along the sub-pages,
+                // slightly shorter than the list.
+                <ul className="relative mt-1 ml-[21px] flex flex-col gap-1 pl-[5px] before:absolute before:top-0.5 before:bottom-1.5 before:left-0 before:w-px before:bg-border">
                     {item.children.map((child) => {
                         const childCurrent = entry.href === child.href;
                         return (

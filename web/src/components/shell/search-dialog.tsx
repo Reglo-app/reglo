@@ -55,7 +55,7 @@ export function SearchDialog() {
                 >
                     <Search />
                     <span className="hidden md:inline">Rechercher…</span>
-                    <kbd className="ml-auto hidden items-center gap-0.5 rounded-sm border border-border px-1.5 font-sans text-xs text-ink-muted md:inline-flex">
+                    <kbd className="ml-auto hidden items-center gap-0.5 rounded-sm border border-border px-1.5 font-mono text-xs text-ink-muted md:inline-flex">
                         {isApple ? (
                             <>
                                 <Command

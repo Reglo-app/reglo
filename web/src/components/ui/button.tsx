@@ -10,7 +10,7 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 // Primary action: one per page header.
-                default: "bg-brand-teal text-white hover:bg-teal-900",
+                default: "bg-brand-gradient text-white hover:brightness-90",
                 // Highlight action (charter: yellow fill with teal text).
                 highlight:
                     "bg-brand-yellow text-brand-teal hover:bg-brand-yellow/85",

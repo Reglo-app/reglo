@@ -16,7 +16,9 @@ describe("ScoreOverview", () => {
     it("shows the global score and links each domain to its page", () => {
         render(<ScoreOverview summary={summary} />);
         expect(screen.getByText("Score global")).toBeInTheDocument();
-        expect(screen.getByText("64")).toBeInTheDocument();
+        expect(
+            screen.getByRole("img", { name: "Score global : 64 sur 100" }),
+        ).toBeInTheDocument();
         expect(screen.getByRole("link", { name: /Sécurité/ })).toHaveAttribute(
             "href",
             "/dashboard/safety",
@@ -91,6 +93,15 @@ describe("UpcomingActionsCard", () => {
 });
 
 describe("NewsCard", () => {
+    it("shows a domain-coloured cover when an article has no image", () => {
+        render(
+            <NewsCard news={[{ ...summary.latestNews[0], imageUrl: null }]} />,
+        );
+        const item = screen.getByRole("listitem");
+        expect(item.querySelector("img")).toBeNull();
+        expect(item).toHaveTextContent("Sécurité");
+    });
+
     it("shows at most three news items with their date", () => {
         render(<NewsCard news={summary.latestNews} />);
         expect(screen.getAllByRole("listitem")).toHaveLength(3);
