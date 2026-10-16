@@ -61,7 +61,7 @@ export default function DashboardPage() {
                 title="Tableau de bord"
                 description="Votre situation sur les quatre domaines QHSE."
                 action={
-                    <Button asChild>
+                    <Button asChild className="transition duration-200">
                         <Link href="/diagnostic">
                             <Plus aria-hidden="true" />
                             Faire un diagnostic

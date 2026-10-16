@@ -26,6 +26,7 @@ const buttonVariants = cva(
                 // border, very light green and a slightly larger shadow.
                 toolbar:
                     "rounded-(--radius-control) border border-border bg-white text-sm font-semibold text-ink shadow-xs transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-green-50/1",
+                seeAll: "rounded-(--radius-control) border border-border bg-white text-sm font-semibold text-ink shadow-xs transition-[color,background-color,border-color,box-shadow] duration-300 hover:bg-green-50/30",
             },
             size: {
                 // Charter: interactive controls are at least 40px high.
@@ -36,6 +37,7 @@ const buttonVariants = cva(
                 toolbar:
                     "px-3 py-[7px] leading-5 [&_svg:not([class*='size-'])]:size-4",
                 "toolbar-icon": "p-[7px] [&_svg:not([class*='size-'])]:size-5",
+                seeAll: "px-3 py-[5px] leading-5 [&_svg:not([class*='size-'])]:size-4",
             },
         },
         defaultVariants: {
