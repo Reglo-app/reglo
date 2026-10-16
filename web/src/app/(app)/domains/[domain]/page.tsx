@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DOMAIN_KEYS, DOMAINS, isDomainKey } from "@/lib/domains";
 
-type Params = PageProps<"/dashboard/[domain]">["params"];
+type Params = PageProps<"/domains/[domain]">["params"];
 
 export function generateStaticParams() {
     return DOMAIN_KEYS.map((domain) => ({ domain }));
@@ -14,7 +14,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
     params,
-}: PageProps<"/dashboard/[domain]">): Promise<Metadata> {
+}: PageProps<"/domains/[domain]">): Promise<Metadata> {
     const { domain } = await params;
     return isDomainKey(domain) ? { title: DOMAINS[domain].label } : {};
 }
@@ -35,9 +35,7 @@ async function DomainContent({ params }: { params: Params }) {
 }
 
 /** One page per QHSE domain. */
-export default function DomainPage({
-    params,
-}: PageProps<"/dashboard/[domain]">) {
+export default function DomainPage({ params }: PageProps<"/domains/[domain]">) {
     // Reading the URL params inside Suspense keeps navigation instant.
     return (
         <Suspense fallback={<Skeleton className="mb-8 h-14 w-72" />}>

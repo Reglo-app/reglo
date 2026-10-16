@@ -33,7 +33,7 @@ describe("SidebarNav", () => {
     });
 
     it("lists the four QHSE domains and highlights the current one", () => {
-        pathname.current = "/dashboard/environment";
+        pathname.current = "/domains/environment";
         render(<SidebarNav />);
         const nav = screen.getByRole("navigation", {
             name: "Navigation principale",

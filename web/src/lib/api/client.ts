@@ -1,5 +1,9 @@
-import { mockCurrentUser, mockDashboardSummary } from "./mocks";
-import type { CurrentUser, DashboardSummary } from "./types";
+import {
+    mockCurrentUser,
+    mockDashboardSummary,
+    mockNewsArticles,
+} from "./mocks";
+import type { CurrentUser, DashboardSummary, NewsArticle } from "./types";
 
 /**
  * Mocks are used unless NEXT_PUBLIC_USE_MOCKS is "false". NEXT_PUBLIC_*
@@ -41,17 +45,35 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export type Api = {
     getCurrentUser(): Promise<CurrentUser>;
     getDashboardSummary(): Promise<DashboardSummary>;
+    /** null when the article does not exist (or is not visible). */
+    getNewsArticle(id: string): Promise<NewsArticle | null>;
 };
 
 const httpApi: Api = {
     getCurrentUser: () => request<CurrentUser>("/api/me"),
     getDashboardSummary: () => request<DashboardSummary>("/api/dashboard"),
+    getNewsArticle: async (id) => {
+        try {
+            return await request<NewsArticle>(
+                `/api/news/${encodeURIComponent(id)}`,
+            );
+        } catch (error) {
+            if (error instanceof ApiError && error.status === 404) {
+                return null;
+            }
+            throw error;
+        }
+    },
 };
 
 // structuredClone: callers can never mutate the shared mock objects.
 const mockApi: Api = {
     getCurrentUser: async () => structuredClone(mockCurrentUser),
     getDashboardSummary: async () => structuredClone(mockDashboardSummary),
+    getNewsArticle: async (id) => {
+        const article = mockNewsArticles.find((a) => a.id === id);
+        return article ? structuredClone(article) : null;
+    },
 };
 
 export function createApi(useMocks: boolean = USE_MOCKS): Api {

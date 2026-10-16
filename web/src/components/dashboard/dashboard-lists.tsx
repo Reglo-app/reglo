@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { BellRing, ListChecks, Newspaper } from "lucide-react";
 
 import { BlockHeader, EmptyLine } from "@/components/dashboard/block";
@@ -192,21 +193,29 @@ export function NewsCard({ news }: { news: NewsSummary[] }) {
                     <ul className="grid gap-4 md:grid-cols-3">
                         {news.slice(0, 3).map((item) => (
                             <li key={item.id}>
-                                <article className="flex h-full flex-col gap-3">
+                                {/* The whole article opens its page. */}
+                                <Link
+                                    href={`/news/${item.id}`}
+                                    className="group flex flex-col gap-3 rounded-lg"
+                                >
                                     <div className="relative aspect-video overflow-hidden rounded-lg bg-surface-subtle">
-                                        <NewsCover item={item} />
+                                        <div className="size-full transition-transform duration-300 group-hover:scale-105 motion-reduce:transition-none">
+                                            <NewsCover item={item} />
+                                        </div>
                                         <DomainBadge
                                             domain={item.domain}
                                             className="absolute top-3 left-3 bg-white"
                                         />
                                     </div>
-                                    <h3 className="line-clamp-2 text-sm font-semibold text-ink">
-                                        {item.title}
-                                    </h3>
-                                    <p className="mt-auto text-xs text-ink-muted">
-                                        {formatDate(item.publishedAt)}
-                                    </p>
-                                </article>
+                                    <div className="flex flex-col gap-1">
+                                        <h3 className="line-clamp-2 text-sm font-semibold text-ink group-hover:underline">
+                                            {item.title}
+                                        </h3>
+                                        <p className="text-xs text-ink-muted">
+                                            {formatDate(item.publishedAt)}
+                                        </p>
+                                    </div>
+                                </Link>
                             </li>
                         ))}
                     </ul>

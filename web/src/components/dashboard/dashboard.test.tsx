@@ -24,7 +24,7 @@ describe("ScoreOverview", () => {
         ).toBeInTheDocument();
         expect(screen.getByRole("link", { name: /Sécurité/ })).toHaveAttribute(
             "href",
-            "/dashboard/safety",
+            "/domains/safety",
         );
         expect(screen.getAllByRole("link")).toHaveLength(4);
         // No diagnostic date in this block.
@@ -132,5 +132,11 @@ describe("NewsCard", () => {
             "href",
             "/news",
         );
+        // Each article opens its own page.
+        expect(
+            screen.getByRole("link", {
+                name: /Tri à la source des biodéchets/,
+            }),
+        ).toHaveAttribute("href", "/news/news-2");
     });
 });

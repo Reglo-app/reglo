@@ -12,6 +12,8 @@ import { DOMAIN_KEYS, DOMAINS, type DomainKey } from "@/lib/domains";
 export type NavChild = {
     href: string;
     label: string;
+    /** Breadcrumb label of its detail pages (e.g. `/news/{id}`). */
+    detailLabel?: string;
 };
 
 export type NavItem = {
@@ -31,7 +33,11 @@ export const HOME_ITEM: NavItem = {
     children: [
         { href: "/diagnostic", label: "Diagnostic" },
         { href: "/actions", label: "Plan d'actions" },
-        { href: "/news", label: "Veille réglementaire" },
+        {
+            href: "/news",
+            label: "Veille réglementaire",
+            detailLabel: "Article",
+        },
     ],
 };
 
@@ -53,7 +59,7 @@ export const NAV_SECTIONS: NavSection[] = [
     {
         title: "Domaines QHSE",
         items: DOMAIN_KEYS.map((key) => ({
-            href: `/dashboard/${key}`,
+            href: `/domains/${key}`,
             label: DOMAINS[key].label,
             icon: DOMAINS[key].icon,
             domain: key,
@@ -87,7 +93,7 @@ export function isActive(entry: { href: string }, pathname: string): boolean {
 
 /**
  * Nav entry (item or child) of the current page. The most specific match
- * wins, so `/dashboard/safety` is "Sécurité", not "Tableau de bord".
+ * wins, so `/actions/42` is "Plan d'actions".
  */
 export function findNavEntry(pathname: string): Entry | undefined {
     return ALL_ENTRIES.filter((entry) => isActive(entry, pathname)).sort(
@@ -108,19 +114,18 @@ export type Crumb = {
 };
 
 /**
- * Breadcrumb for a path: home, the section, the sub-page if any, then any
- * detail segment. The last crumb is the current page.
+ * Breadcrumb for a path: the top-level section, the sub-page if any, then
+ * a detail segment. "Tableau de bord" only appears in its own branch
+ * (e.g. Tableau de bord / Diagnostic), not before Justificatifs or Qualité.
+ * The last crumb is the current page.
  */
 export function getBreadcrumb(pathname: string): Crumb[] {
-    const crumbs: Crumb[] = [HOME_ITEM];
     const entry = findNavEntry(pathname);
     if (!entry) {
-        return crumbs;
+        return [HOME_ITEM];
     }
 
-    if (entry.item !== HOME_ITEM) {
-        crumbs.push(entry.item);
-    }
+    const crumbs: Crumb[] = [entry.item];
     if (entry.isChild) {
         crumbs.push({ label: entry.label, href: entry.href });
     }
@@ -128,7 +133,7 @@ export function getBreadcrumb(pathname: string): Crumb[] {
     if (pathname !== entry.href) {
         const detail = pathname.slice(entry.href.length + 1).split("/")[0];
         crumbs.push({
-            label: decodeURIComponent(detail),
+            label: entry.detailLabel ?? decodeURIComponent(detail),
             href: `${entry.href}/${detail}`,
         });
     }

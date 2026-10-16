@@ -32,6 +32,12 @@ describe("mock api", () => {
         expect((await api.getCurrentUser()).firstName).not.toBe("Modifié");
     });
 
+    it("returns a news article by id, or null", async () => {
+        const article = await api.getNewsArticle("news-1");
+        expect(article?.paragraphs.length).toBeGreaterThan(0);
+        expect(await api.getNewsArticle("unknown")).toBeNull();
+    });
+
     it("does not call the network", async () => {
         const fetchMock = vi.fn();
         vi.stubGlobal("fetch", fetchMock);
@@ -56,6 +62,14 @@ describe("http api", () => {
             expect.stringMatching(/\/api\/me$/),
             expect.objectContaining({ credentials: "include" }),
         );
+    });
+
+    it("returns null for an article the API does not know", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn().mockResolvedValue(new Response(null, { status: 404 })),
+        );
+        expect(await api.getNewsArticle("news-9")).toBeNull();
     });
 
     it("throws an ApiError with the status on failure", async () => {

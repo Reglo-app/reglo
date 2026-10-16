@@ -2,7 +2,7 @@
 // News covers are generated placeholders in public/mock/news/.
 // No real person or company: names are invented.
 
-import type { CurrentUser, DashboardSummary } from "./types";
+import type { CurrentUser, DashboardSummary, NewsArticle } from "./types";
 
 export const mockCurrentUser: CurrentUser = {
     id: "0192f0c4-7a3e-7c3a-9b1e-5d2a1c000001",
@@ -116,3 +116,43 @@ export const mockDashboardSummary: DashboardSummary = {
         },
     ],
 };
+
+/** Full articles behind `latestNews` (fictitious summaries, not legal advice). */
+export const mockNewsArticles: NewsArticle[] = [
+    {
+        ...mockDashboardSummary.latestNews[0],
+        summary:
+            "Un nouvel arrêté précise la périodicité des vérifications des équipements de levage et des installations électriques.",
+        paragraphs: [
+            "Les équipements de travail soumis à vérification périodique doivent être contrôlés selon une fréquence fixée par arrêté. Le nouveau texte regroupe ces fréquences dans un seul tableau, par type d'équipement.",
+            "Pour les appareils de levage, la vérification reste semestrielle. Pour les installations électriques, elle devient annuelle quel que soit l'effectif, avec un rapport à conserver dans le registre de sécurité.",
+            "À faire : vérifier que chaque équipement concerné a une date de prochaine vérification dans REGLO et joindre le dernier rapport en justificatif.",
+        ],
+        sourceName: "Journal officiel",
+        sourceUrl: null,
+    },
+    {
+        ...mockDashboardSummary.latestNews[1],
+        summary:
+            "Toutes les entreprises qui produisent des biodéchets doivent les trier à la source et les faire valoriser.",
+        paragraphs: [
+            "Depuis le 1er janvier 2024, le tri à la source des biodéchets est obligatoire pour tous les producteurs, quelle que soit la quantité produite.",
+            "Les biodéchets doivent être collectés séparément ou compostés sur place. Les bordereaux de collecte servent de preuve en cas de contrôle.",
+            "À faire : désigner un prestataire de collecte et ranger ses bordereaux dans les justificatifs Environnement.",
+        ],
+        sourceName: "Ministère de la Transition écologique",
+        sourceUrl: null,
+    },
+    {
+        ...mockDashboardSummary.latestNews[2],
+        summary:
+            "Des délais de réponse indicatifs aident à traiter les réclamations clients de façon homogène.",
+        paragraphs: [
+            "Un accusé de réception sous 48 heures et une réponse complète sous 15 jours ouvrés sont recommandés pour les réclamations clients.",
+            "Chaque réclamation doit être enregistrée, analysée et, si besoin, transformée en action corrective suivie dans le plan d'actions.",
+            "À faire : vérifier que les réclamations de l'année ont toutes une date de réponse.",
+        ],
+        sourceName: "Guide qualité (exemple)",
+        sourceUrl: null,
+    },
+];

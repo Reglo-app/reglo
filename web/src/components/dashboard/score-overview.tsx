@@ -12,7 +12,7 @@ import { BlockHeader } from "@/components/dashboard/block";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { DashboardSummary, DomainScore } from "@/lib/api";
-import { DOMAIN_ICON_CLASSES, DOMAINS } from "@/lib/domains";
+import { DOMAIN_ICON_CLASSES, DOMAINS, type DomainKey } from "@/lib/domains";
 import { cn } from "@/lib/utils";
 
 /** Words for a score, so the level is never given by a number alone. */
@@ -105,42 +105,65 @@ function ScoreRing({ score }: { score: number }) {
 
 // --- Detailed list ----------------------------------------------------------
 
-function DomainRow(score: DomainScore) {
+const BAR_CLASSES: Record<DomainKey, string> = {
+    quality: "bg-quality",
+    hygiene: "bg-hygiene",
+    safety: "bg-safety",
+    environment: "bg-environment",
+};
+
+/** One QHSE pillar: name, score, trend and a bar in its colour. */
+function DomainTile(score: DomainScore) {
     const { label, icon: Icon } = DOMAINS[score.domain];
     return (
-        <li>
+        <li className="flex">
             <Link
-                href={`/dashboard/${score.domain}`}
-                className="group flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors hover:bg-green-50"
+                href={`/domains/${score.domain}`}
+                className="group flex flex-1 flex-col justify-between gap-3 rounded-lg border border-border p-4 transition-colors hover:border-border-strong hover:bg-green-50"
             >
-                <Icon
-                    aria-hidden="true"
-                    className={cn(
-                        "size-5 shrink-0",
-                        DOMAIN_ICON_CLASSES[score.domain],
-                    )}
-                />
-                <span className="flex-1 text-sm font-medium text-ink">
-                    {label}
+                <span className="flex items-center gap-2 text-sm font-medium text-ink">
+                    <Icon
+                        aria-hidden="true"
+                        className={cn(
+                            "size-5 shrink-0",
+                            DOMAIN_ICON_CLASSES[score.domain],
+                        )}
+                    />
+                    <span className="flex-1">{label}</span>
+                    <ChevronRight
+                        aria-hidden="true"
+                        className="size-4 text-ink-muted opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                 </span>
-                <Trend
-                    score={score.score}
-                    previousScore={score.previousScore}
-                />
-                <span className="w-10 text-right text-lg font-semibold text-ink">
-                    {score.score}
-                    <span className="sr-only"> sur 100</span>
+                <span className="flex items-end justify-between gap-2">
+                    <span className="text-3xl font-semibold text-ink">
+                        {score.score}
+                        <span className="sr-only"> sur 100</span>
+                    </span>
+                    <Trend
+                        score={score.score}
+                        previousScore={score.previousScore}
+                    />
                 </span>
-                <ChevronRight
+                {/* Decorative: the number above says the same thing. */}
+                <span
                     aria-hidden="true"
-                    className="size-4 text-ink-muted opacity-0 transition-opacity group-hover:opacity-100"
-                />
+                    className="h-1.5 overflow-hidden rounded-full bg-surface-subtle"
+                >
+                    <span
+                        className={cn(
+                            "block h-full rounded-full",
+                            BAR_CLASSES[score.domain],
+                        )}
+                        style={{ width: `${score.score}%` }}
+                    />
+                </span>
             </Link>
         </li>
     );
 }
 
-/** Block 1, "Où en suis-je ?": global score ring on the left, domains on the right. */
+/** Block 1, "Où en suis-je ?": global score ring on the left, pillars in a 2 × 2 grid. */
 export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
     if (summary.globalScore === null) {
         return (
@@ -202,10 +225,11 @@ export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
                     )}
                 </div>
 
-                {/* Detailed scores, one row per QHSE domain. */}
-                <ul className="flex flex-col justify-center divide-y divide-border">
+                {/* Detailed scores: the four pillars in a 2 × 2 grid that
+                    fills the height of the global score panel. */}
+                <ul className="grid gap-3 sm:grid-cols-2 sm:grid-rows-2">
                     {summary.domains.map((score) => (
-                        <DomainRow key={score.domain} {...score} />
+                        <DomainTile key={score.domain} {...score} />
                     ))}
                 </ul>
             </CardContent>

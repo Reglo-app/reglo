@@ -49,8 +49,8 @@ describe("navigation tree", () => {
         expect(findNavItem("/diagnostic")).toBe(HOME_ITEM);
     });
 
-    it("prefers the QHSE domain over the dashboard", () => {
-        expect(findNavItem("/dashboard/safety")?.label).toBe("Sécurité");
+    it("maps a domain page to its pillar", () => {
+        expect(findNavItem("/domains/safety")?.label).toBe("Sécurité");
         expect(findNavItem("/dashboard")?.label).toBe("Tableau de bord");
     });
 });
@@ -62,13 +62,10 @@ describe("getBreadcrumb", () => {
         ]);
     });
 
-    it("adds the section, with its icon, after the home crumb", () => {
+    it("starts at the section for pages outside Tableau de bord", () => {
         const crumbs = getBreadcrumb("/documents");
-        expect(crumbs.map((c) => c.label)).toEqual([
-            "Tableau de bord",
-            "Justificatifs",
-        ]);
-        expect(crumbs.every((c) => c.icon)).toBe(true);
+        expect(crumbs.map((c) => c.label)).toEqual(["Justificatifs"]);
+        expect(crumbs[0].icon).toBeDefined();
     });
 
     it("shows a sub-page of the home branch after the home crumb", () => {
@@ -82,10 +79,18 @@ describe("getBreadcrumb", () => {
         ]);
     });
 
-    it("gives a domain page a home + domain breadcrumb", () => {
-        expect(getBreadcrumb("/dashboard/hygiene").map((c) => c.label)).toEqual(
-            ["Tableau de bord", "Hygiène-Santé"],
-        );
+    it("shows only the pillar on a domain page", () => {
+        expect(getBreadcrumb("/domains/hygiene").map((c) => c.label)).toEqual([
+            "Hygiène-Santé",
+        ]);
+    });
+
+    it("names an article page instead of showing its id", () => {
+        expect(getBreadcrumb("/news/news-1").map((c) => c.label)).toEqual([
+            "Tableau de bord",
+            "Veille réglementaire",
+            "Article",
+        ]);
     });
 
     it("adds a detail crumb for a sub-page", () => {

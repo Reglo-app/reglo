@@ -71,6 +71,17 @@ export type NewsSummary = {
     imageUrl: string | null;
 };
 
+/** `GET /api/news/{id}`: one regulatory news article. */
+export type NewsArticle = NewsSummary & {
+    /** Short summary shown under the title. */
+    summary: string;
+    /** Body, one string per paragraph (plain text). */
+    paragraphs: string[];
+    /** Where the text comes from (official journal, ministry…). */
+    sourceName: string;
+    sourceUrl: string | null;
+};
+
 /** `GET /api/dashboard`: everything the home page shows. */
 export type DashboardSummary = {
     /** ISO 8601 date the summary was computed: "today" for due dates. */
