@@ -14,7 +14,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
  */
 final class LoginFailureHandler implements AuthenticationFailureHandlerInterface
 {
-    public const MESSAGE = 'Identifiants invalides.';
+    public const MESSAGE = 'Identifiants incorrects';
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
