@@ -36,22 +36,16 @@ export function UserMenu({
         <DropdownMenu>
             <DropdownMenuTrigger
                 aria-label={`Menu de ${fullName}`}
-                className="flex min-h-10 items-center gap-2.5 rounded-md border border-border bg-white py-0.5 pr-2 pl-1 transition-colors hover:border-border-strong hover:bg-green-50 aria-expanded:bg-green-50"
+                className="flex items-center gap-2 rounded-(--radius-control) border border-brand-teal/32 bg-white py-[5px] pr-2.5 pl-[5px] text-[13px] font-semibold text-ink transition-colors hover:border-brand-green hover:bg-green-50 aria-expanded:border-brand-green aria-expanded:bg-green-50"
             >
                 <span
                     aria-hidden="true"
-                    className="flex size-8 items-center justify-center rounded-sm bg-brand-blue text-sm font-semibold text-brand-teal"
+                    className="flex size-[22px] items-center justify-center rounded-sm bg-brand-blue text-[11px] font-semibold text-brand-teal"
                 >
                     {initials(fullName)}
                 </span>
-                <span className="hidden text-left leading-tight md:block">
-                    <span className="block text-sm font-medium text-ink">
-                        {fullName}
-                    </span>
-                    <span className="block text-xs text-ink-muted">
-                        {roleLabel}
-                    </span>
-                </span>
+                {/* One line, like the other topbar controls; the role is in the menu. */}
+                <span className="hidden leading-5 md:block">{fullName}</span>
                 <ChevronDown
                     aria-hidden="true"
                     className="size-4 text-ink-muted"
@@ -63,7 +57,7 @@ export function UserMenu({
                         {fullName}
                     </span>
                     <span className="block text-xs text-ink-muted">
-                        {organizationName}
+                        {roleLabel} · {organizationName}
                     </span>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />

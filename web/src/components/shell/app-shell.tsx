@@ -81,8 +81,8 @@ export function AppShell({ userMenu, children }: AppShellProps) {
             <div className="flex min-w-0 flex-1 flex-col">
                 <header className="sticky top-0 z-40 flex h-16 items-center gap-2 border-b border-border bg-surface-subtle px-4 sm:px-6">
                     <Button
-                        variant="ghost"
-                        size="icon"
+                        variant="toolbar"
+                        size="toolbar-icon"
                         className="lg:hidden"
                         aria-label="Ouvrir le menu"
                         aria-expanded={mobileOpen}
@@ -91,8 +91,8 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                         <PanelLeft />
                     </Button>
                     <Button
-                        variant="ghost"
-                        size="icon"
+                        variant="toolbar"
+                        size="toolbar-icon"
                         className="hidden lg:inline-flex"
                         aria-label={
                             collapsed ? "Déplier le menu" : "Replier le menu"
@@ -115,18 +115,18 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                         >
                             <Search
                                 aria-hidden="true"
-                                className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-ink-muted"
+                                className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-muted"
                             />
                             <Input
                                 type="search"
                                 aria-label="Rechercher"
                                 placeholder="Rechercher…"
-                                className="w-64 border-border bg-white pl-10"
+                                className="h-auto w-64 rounded-(--radius-control) border-brand-teal/32 bg-white py-[7px] pr-3 pl-9 text-[13px] leading-[18px] font-semibold placeholder:font-normal hover:border-brand-green focus-visible:border-brand-green"
                             />
                         </form>
                         <Button
-                            variant="outline"
-                            size="icon"
+                            variant="toolbar"
+                            size="toolbar-icon"
                             aria-label="Notifications"
                         >
                             <Bell />
