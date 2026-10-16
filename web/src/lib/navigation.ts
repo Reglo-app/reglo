@@ -2,7 +2,6 @@ import {
     FileCheck,
     GraduationCap,
     LayoutDashboard,
-    ListChecks,
     Settings,
     type LucideIcon,
 } from "lucide-react";
@@ -31,6 +30,7 @@ export const HOME_ITEM: NavItem = {
     icon: LayoutDashboard,
     children: [
         { href: "/diagnostic", label: "Diagnostic" },
+        { href: "/actions", label: "Plan d'actions" },
         { href: "/news", label: "Veille réglementaire" },
     ],
 };
@@ -46,7 +46,6 @@ export const NAV_SECTIONS: NavSection[] = [
     {
         items: [
             HOME_ITEM,
-            { href: "/actions", label: "Plan d'actions", icon: ListChecks },
             { href: "/documents", label: "Justificatifs", icon: FileCheck },
             { href: "/trainings", label: "Formations", icon: GraduationCap },
         ],

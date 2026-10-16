@@ -64,7 +64,7 @@ test("Diagnostic appears in the sidebar only in its branch", async ({
     const sidebar = page.getByRole("navigation", {
         name: "Navigation principale",
     });
-    await page.goto("/actions");
+    await page.goto("/documents");
     await expect(sidebar.getByRole("link", { name: "Diagnostic" })).toHaveCount(
         0,
     );

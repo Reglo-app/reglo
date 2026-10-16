@@ -20,13 +20,15 @@ describe("isActive", () => {
 });
 
 describe("navigation tree", () => {
-    it("puts Diagnostic and Veille réglementaire under Tableau de bord", () => {
+    it("puts Diagnostic, Plan d'actions and Veille under Tableau de bord", () => {
         expect(HOME_ITEM.children?.map((c) => c.label)).toEqual([
             "Diagnostic",
+            "Plan d'actions",
             "Veille réglementaire",
         ]);
         const topLevel = NAV_ITEMS.map((item) => item.label);
         expect(topLevel).not.toContain("Diagnostic");
+        expect(topLevel).not.toContain("Plan d'actions");
         expect(topLevel).not.toContain("Veille réglementaire");
     });
 
@@ -61,10 +63,10 @@ describe("getBreadcrumb", () => {
     });
 
     it("adds the section, with its icon, after the home crumb", () => {
-        const crumbs = getBreadcrumb("/actions");
+        const crumbs = getBreadcrumb("/documents");
         expect(crumbs.map((c) => c.label)).toEqual([
             "Tableau de bord",
-            "Plan d'actions",
+            "Justificatifs",
         ]);
         expect(crumbs.every((c) => c.icon)).toBe(true);
     });

@@ -72,7 +72,7 @@ describe("SidebarNav", () => {
     });
 
     it("shows Diagnostic only inside the Tableau de bord branch", () => {
-        pathname.current = "/actions";
+        pathname.current = "/documents";
         const { unmount } = render(<SidebarNav />);
         expect(
             screen.queryByRole("link", { name: "Diagnostic" }),
