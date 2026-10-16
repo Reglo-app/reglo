@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { Command, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,15 @@ import {
  */
 export function SearchDialog() {
     const [open, setOpen] = useState(false);
+    // Mac users see ⌘K, everyone else Ctrl K. Known only in the browser.
+    const [isApple, setIsApple] = useState(false);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- read once from the browser
+        setIsApple(
+            /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent),
+        );
+    }, []);
 
     useEffect(() => {
         function onKeyDown(event: KeyboardEvent) {
@@ -41,13 +50,23 @@ export function SearchDialog() {
                     variant="toolbar"
                     size="toolbar"
                     aria-label="Rechercher"
-                    aria-keyshortcuts="Control+K"
+                    aria-keyshortcuts="Control+K Meta+K"
                     className="w-auto justify-start font-normal text-ink-muted md:w-64"
                 >
                     <Search />
                     <span className="hidden md:inline">Rechercher…</span>
-                    <kbd className="ml-auto hidden rounded-sm border border-border px-1.5 text-xs text-ink-muted md:inline">
-                        Ctrl K
+                    <kbd className="ml-auto hidden items-center gap-0.5 rounded-sm border border-border px-1.5 font-sans text-xs text-ink-muted md:inline-flex">
+                        {isApple ? (
+                            <>
+                                <Command
+                                    aria-label="Commande"
+                                    className="size-3!"
+                                />
+                                K
+                            </>
+                        ) : (
+                            "Ctrl K"
+                        )}
                     </kbd>
                 </Button>
             </DialogTrigger>

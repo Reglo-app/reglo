@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import { SearchDialog } from "@/components/shell/search-dialog";
 
@@ -17,6 +17,18 @@ describe("SearchDialog", () => {
         expect(
             screen.getByRole("searchbox", { name: "Rechercher dans REGLO" }),
         ).toHaveFocus();
+    });
+
+    it("shows Ctrl K on Windows and ⌘K on Mac", () => {
+        const { unmount } = render(<SearchDialog />);
+        expect(screen.getByText("Ctrl K")).toBeInTheDocument();
+        unmount();
+
+        vi.spyOn(navigator, "platform", "get").mockReturnValue("MacIntel");
+        render(<SearchDialog />);
+        expect(screen.getByLabelText("Commande")).toBeInTheDocument();
+        expect(screen.queryByText("Ctrl K")).not.toBeInTheDocument();
+        vi.restoreAllMocks();
     });
 
     it("opens with Ctrl+K and closes with Escape", async () => {

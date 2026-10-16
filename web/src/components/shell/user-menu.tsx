@@ -38,7 +38,7 @@ export function UserMenu({
                 are in the menu. */}
             <DropdownMenuTrigger
                 aria-label={`Menu de ${fullName}, ${organizationName}`}
-                className="ml-1 flex items-center gap-1.5 rounded-full p-0.5 pr-1.5 transition-colors hover:bg-green-50 aria-expanded:bg-green-50 sm:ml-2"
+                className="ml-1 flex items-center gap-1.5 rounded-full p-0.5 pr-1.5 transition-[background-color,box-shadow] hover:bg-green-50 hover:shadow-sm aria-expanded:bg-green-50 aria-expanded:shadow-sm sm:ml-2"
             >
                 <span
                     aria-hidden="true"
