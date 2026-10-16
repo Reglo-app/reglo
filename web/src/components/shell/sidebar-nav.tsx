@@ -75,7 +75,9 @@ function NavBranch({
             </Link>
 
             {item.children && inBranch && !collapsed && (
-                <ul className="mt-1 flex flex-col gap-1">
+                // Thin line from under the parent icon (its centre is 12px
+                // padding + 10px = 22px from the left), along the sub-pages.
+                <ul className="mt-1 ml-[21px] flex flex-col gap-1 border-l border-border pl-1">
                     {item.children.map((child) => {
                         const childCurrent = entry.href === child.href;
                         return (
@@ -86,9 +88,10 @@ function NavBranch({
                                     aria-current={
                                         childCurrent ? "page" : undefined
                                     }
-                                    // pl-11 = item padding (12px) + icon (20px) + gap (12px).
+                                    // Text lines up with the parent's text at 44px:
+                                    // 21px margin + 1px line + 4px + 18px.
                                     className={cn(
-                                        "flex min-h-9 items-center rounded-md pr-3 pl-11 text-sm font-medium transition-colors",
+                                        "flex min-h-9 items-center rounded-md pr-3 pl-[18px] text-sm font-medium transition-colors",
                                         childCurrent
                                             ? "bg-green-50 text-ink"
                                             : "text-ink-muted hover:bg-surface-subtle hover:text-ink",
