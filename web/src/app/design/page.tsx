@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function DesignPage() {
     return (
         <main className="mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-8">
-            <h1 className="font-display text-4xl font-extrabold">
+            <h1 className="font-display text-xl font-extrabold tracking-wide uppercase sm:text-2xl">
                 Design system
             </h1>
             <p className="mt-2 mb-10 text-ink-muted">

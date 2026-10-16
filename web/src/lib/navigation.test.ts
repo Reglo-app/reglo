@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { HOME_ITEM, getBreadcrumb, isActive } from "@/lib/navigation";
+import {
+    HOME_ITEM,
+    findNavItem,
+    getBreadcrumb,
+    isActive,
+} from "@/lib/navigation";
 
 describe("isActive", () => {
     it("matches the page and its sub-pages only", () => {
@@ -37,5 +42,18 @@ describe("getBreadcrumb", () => {
 
     it("falls back to the home crumb for an unknown path", () => {
         expect(getBreadcrumb("/unknown")).toHaveLength(1);
+    });
+});
+
+describe("findNavItem", () => {
+    it("prefers the QHSE domain over the dashboard", () => {
+        expect(findNavItem("/dashboard/safety")?.label).toBe("Sécurité");
+        expect(findNavItem("/dashboard")?.label).toBe("Tableau de bord");
+    });
+
+    it("gives a domain page a home + domain breadcrumb", () => {
+        expect(getBreadcrumb("/dashboard/hygiene").map((c) => c.label)).toEqual(
+            ["Tableau de bord", "Hygiène-Santé"],
+        );
     });
 });

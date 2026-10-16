@@ -32,6 +32,30 @@ describe("SidebarNav", () => {
         ).not.toHaveAttribute("aria-current");
     });
 
+    it("lists the four QHSE domains and highlights the current one", () => {
+        pathname.current = "/dashboard/environment";
+        render(<SidebarNav />);
+        const nav = screen.getByRole("navigation", {
+            name: "Navigation principale",
+        });
+        for (const label of [
+            "Qualité",
+            "Hygiène-Santé",
+            "Sécurité",
+            "Environnement",
+        ]) {
+            expect(
+                within(nav).getByRole("link", { name: label }),
+            ).toBeInTheDocument();
+        }
+        expect(
+            within(nav).getByRole("link", { name: "Environnement" }),
+        ).toHaveAttribute("aria-current", "page");
+        expect(
+            within(nav).getByRole("link", { name: "Tableau de bord" }),
+        ).not.toHaveAttribute("aria-current");
+    });
+
     it("keeps accessible labels when collapsed", () => {
         render(<SidebarNav collapsed />);
         expect(

@@ -9,10 +9,14 @@ import {
     type LucideIcon,
 } from "lucide-react";
 
+import { DOMAIN_KEYS, DOMAINS, type DomainKey } from "@/lib/domains";
+
 export type NavItem = {
     href: string;
     label: string;
     icon: LucideIcon;
+    /** QHSE domain of the page, shown with its colour in the sidebar. */
+    domain?: DomainKey;
 };
 
 export type NavGroup = {
@@ -34,6 +38,15 @@ export const NAV_GROUPS: NavGroup[] = [
             { href: "/diagnostic", label: "Diagnostic", icon: ClipboardCheck },
             { href: "/actions", label: "Plan d'actions", icon: ListChecks },
         ],
+    },
+    {
+        label: "Domaines QHSE",
+        items: DOMAIN_KEYS.map((key) => ({
+            href: `/dashboard/${key}`,
+            label: DOMAINS[key].label,
+            icon: DOMAINS[key].icon,
+            domain: key,
+        })),
     },
     {
         label: "Ressources",
@@ -61,8 +74,14 @@ export function isActive(item: NavItem, pathname: string): boolean {
     return pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
 
+/**
+ * Nav item of the current page. The most specific match wins, so
+ * `/dashboard/safety` is "Sécurité", not "Tableau de bord".
+ */
 export function findNavItem(pathname: string): NavItem | undefined {
-    return ALL_ITEMS.find((item) => isActive(item, pathname));
+    return ALL_ITEMS.filter((item) => isActive(item, pathname)).sort(
+        (a, b) => b.href.length - a.href.length,
+    )[0];
 }
 
 export type Crumb = {

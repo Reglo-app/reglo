@@ -1,18 +1,40 @@
 import { expect, test } from "@playwright/test";
 
-test("dashboard keeps the selected QHSE domain in the URL", async ({
+test("opens a QHSE domain page from the sidebar", async ({ page }) => {
+    await page.goto("/dashboard");
+    const sidebar = page.getByRole("navigation", {
+        name: "Navigation principale",
+    });
+
+    await sidebar.getByRole("link", { name: "Sécurité" }).click();
+
+    await expect(page).toHaveURL(/\/dashboard\/safety$/);
+    await expect(
+        page.getByRole("heading", { level: 1, name: "Sécurité" }),
+    ).toBeVisible();
+    await expect(
+        sidebar.getByRole("link", { name: "Sécurité" }),
+    ).toHaveAttribute("aria-current", "page");
+    await expect(
+        page
+            .getByRole("navigation", { name: "Fil d'Ariane" })
+            .getByRole("link", { name: "Tableau de bord" }),
+    ).toBeVisible();
+});
+
+test("shows a French not found page for an unknown domain", async ({
     page,
 }) => {
-    await page.goto("/dashboard");
-    const tabs = page.getByRole("tablist", { name: "Domaines QHSE" });
-    await expect(tabs.getByRole("tab")).toHaveCount(4);
+    await page.goto("/dashboard/finance");
+    await expect(
+        page.getByRole("heading", { level: 1, name: "Page introuvable" }),
+    ).toBeVisible();
+});
 
-    await tabs.getByRole("tab", { name: "Sécurité" }).click();
-    await expect(page).toHaveURL(/domain=safety/);
-
-    await page.reload();
-    await expect(page.getByRole("tab", { name: "Sécurité" })).toHaveAttribute(
-        "aria-selected",
-        "true",
-    );
+test("shows a French not found page for an unknown url", async ({ page }) => {
+    const response = await page.goto("/does-not-exist");
+    expect(response?.status()).toBe(404);
+    await expect(
+        page.getByRole("heading", { level: 1, name: "Page introuvable" }),
+    ).toBeVisible();
 });

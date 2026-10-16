@@ -8,10 +8,18 @@ import {
     HOME_ITEM,
     NAV_GROUPS,
     SETTINGS_ITEM,
-    isActive,
+    findNavItem,
     type NavItem,
 } from "@/lib/navigation";
+import type { DomainKey } from "@/lib/domains";
 import { cn } from "@/lib/utils";
+
+const DOMAIN_DOT_CLASSES: Record<DomainKey, string> = {
+    quality: "bg-quality",
+    hygiene: "bg-hygiene",
+    safety: "bg-safety",
+    environment: "bg-environment",
+};
 
 type SidebarNavProps = {
     /** Icons only (desktop collapsed sidebar). */
@@ -30,7 +38,7 @@ function NavLink({
     onNavigate?: () => void;
 }) {
     const pathname = usePathname();
-    const active = isActive(item, pathname);
+    const active = findNavItem(pathname)?.href === item.href;
     const Icon = item.icon;
 
     return (
@@ -55,13 +63,22 @@ function NavLink({
                 )}
             />
             <span className={cn(collapsed && "sr-only")}>{item.label}</span>
+            {item.domain && !collapsed && (
+                <span
+                    aria-hidden="true"
+                    className={cn(
+                        "ml-auto size-2.5 shrink-0 rounded-full",
+                        DOMAIN_DOT_CLASSES[item.domain],
+                    )}
+                />
+            )}
         </Link>
     );
 }
 
 export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
     return (
-        <div className="flex h-full flex-col gap-6 px-3 py-4">
+        <div className="flex h-full flex-col gap-6 overflow-y-auto px-3 py-4">
             <Link
                 href={HOME_ITEM.href}
                 onClick={onNavigate}
