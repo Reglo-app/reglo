@@ -122,8 +122,8 @@ export function AppShell({ userMenu, children }: AppShellProps) {
                 <main
                     id="main-content"
                     tabIndex={-1}
-                    // Left-aligned next to the sidebar, folded or not.
-                    className="w-full max-w-[1200px] flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
+                    // Uses the full width next to the sidebar, folded or not.
+                    className="w-full flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
                 >
                     {children}
                 </main>

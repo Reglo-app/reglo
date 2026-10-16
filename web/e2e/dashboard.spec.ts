@@ -42,8 +42,7 @@ test("shows a French not found page for an unknown url", async ({ page }) => {
 test("home page shows the four blocks", async ({ page }) => {
     await page.goto("/dashboard");
     for (const title of [
-        "Score global",
-        "Par domaine",
+        "Score QHSE",
         "Alertes",
         "Prochaines actions",
         "Veille réglementaire",

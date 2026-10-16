@@ -1,8 +1,8 @@
 import Link from "next/link";
 import {
+    ChevronRight,
     ClipboardCheck,
     Gauge,
-    LayoutGrid,
     Minus,
     TrendingDown,
     TrendingUp,
@@ -27,11 +27,9 @@ export function scoreLevel(score: number): string {
 function Trend({
     score,
     previousScore,
-    className,
 }: {
     score: number;
     previousScore: number | null;
-    className?: string;
 }) {
     if (previousScore === null) {
         return <span className="sr-only">Premier diagnostic</span>;
@@ -42,12 +40,9 @@ function Trend({
         <span
             className={cn(
                 "flex items-center gap-1 text-sm font-medium",
-                className ??
-                    cn(
-                        delta > 0 && "text-green-700",
-                        delta < 0 && "text-danger-700",
-                        delta === 0 && "text-ink-muted",
-                    ),
+                delta > 0 && "text-green-700",
+                delta < 0 && "text-danger-700",
+                delta === 0 && "text-ink-muted",
             )}
         >
             <Icon aria-hidden="true" className="size-4" />
@@ -61,36 +56,114 @@ function Trend({
     );
 }
 
-const GAUGE_TICKS = 48;
+// --- Concentric arcs -------------------------------------------------------
+
+/** Arcs cover 270°, open at the bottom (inspiration captures 6 and 7). */
+const ARC_SWEEP = 0.75;
+/** Rotation so the arc starts bottom-left and ends bottom-right. */
+const ARC_START = 135;
+/** One gradient on the page: the global arc. */
+const GLOBAL_GRADIENT_ID = "score-global-gradient";
+
+const ARC_CLASSES: Record<DomainKey, string> = {
+    quality: "stroke-quality",
+    hygiene: "stroke-hygiene",
+    safety: "stroke-safety",
+    environment: "stroke-environment",
+};
+
+function Arc({
+    radius,
+    width,
+    score,
+    className,
+    stroke,
+}: {
+    radius: number;
+    width: number;
+    score: number;
+    className?: string;
+    stroke?: string;
+}) {
+    const length = 2 * Math.PI * radius;
+    const track = length * ARC_SWEEP;
+    const value = (track * Math.min(100, Math.max(0, score))) / 100;
+    const common = {
+        cx: 100,
+        cy: 100,
+        r: radius,
+        fill: "none",
+        strokeWidth: width,
+        strokeLinecap: "round" as const,
+        transform: `rotate(${ARC_START} 100 100)`,
+    };
+    return (
+        <>
+            <circle
+                {...common}
+                strokeDasharray={`${track} ${length}`}
+                className="stroke-teal-50"
+            />
+            {value > 0 && (
+                <circle
+                    {...common}
+                    strokeDasharray={`${value} ${length}`}
+                    stroke={stroke}
+                    className={className}
+                />
+            )}
+        </>
+    );
+}
 
 /**
- * Segmented gauge (inspiration capture 6): one tick per ~2 points, filled
- * ticks in white, the rest faded. The score sits in the middle.
+ * Big chart: the global score on the outer arc (brand gradient), one inner
+ * arc per QHSE domain in its colour, the global score in the middle.
  */
-function ScoreGauge({ score }: { score: number }) {
-    const filled = Math.round(
-        (Math.min(100, Math.max(0, score)) / 100) * GAUGE_TICKS,
-    );
+function ScoreRings({
+    globalScore,
+    domains,
+}: {
+    globalScore: number;
+    domains: DomainScore[];
+}) {
+    const label = [
+        `Score global : ${globalScore} sur 100`,
+        ...domains.map((d) => `${DOMAINS[d.domain].label} : ${d.score}`),
+    ].join(". ");
+
     return (
         <div
             role="img"
-            aria-label={`Score global : ${score} sur 100`}
-            className="relative size-44 shrink-0"
+            aria-label={label}
+            className="relative size-60 shrink-0"
         >
-            <svg viewBox="0 0 100 100" className="size-full">
-                {Array.from({ length: GAUGE_TICKS }, (_, index) => (
-                    <line
-                        key={index}
-                        x1="50"
-                        y1="3"
-                        x2="50"
-                        y2="12"
-                        strokeWidth="2.4"
-                        strokeLinecap="round"
-                        transform={`rotate(${(index * 360) / GAUGE_TICKS} 50 50)`}
-                        className={
-                            index < filled ? "stroke-white" : "stroke-white/25"
-                        }
+            <svg viewBox="0 0 200 200" className="size-full">
+                <defs>
+                    <linearGradient
+                        id={GLOBAL_GRADIENT_ID}
+                        x1="0"
+                        y1="0"
+                        x2="1"
+                        y2="0"
+                    >
+                        <stop offset="0" stopColor="var(--color-teal-700)" />
+                        <stop offset="1" stopColor="var(--color-brand-green)" />
+                    </linearGradient>
+                </defs>
+                <Arc
+                    radius={90}
+                    width={12}
+                    score={globalScore}
+                    stroke={`url(#${GLOBAL_GRADIENT_ID})`}
+                />
+                {domains.map((d, index) => (
+                    <Arc
+                        key={d.domain}
+                        radius={73 - index * 10}
+                        width={7}
+                        score={d.score}
+                        className={ARC_CLASSES[d.domain]}
                     />
                 ))}
             </svg>
@@ -98,106 +171,53 @@ function ScoreGauge({ score }: { score: number }) {
                 aria-hidden="true"
                 className="absolute inset-0 flex flex-col items-center justify-center"
             >
-                <span className="text-5xl leading-none font-semibold">
-                    {score}
+                <span className="text-4xl leading-none font-semibold text-ink">
+                    {globalScore}
                 </span>
-                <span className="text-sm text-white/80">/ 100</span>
+                <span className="text-xs text-ink-muted">/ 100</span>
             </span>
         </div>
     );
 }
 
-/** Hero card: the global score, its level and its trend. */
-function GlobalScoreCard({ summary }: { summary: DashboardSummary }) {
-    const score = summary.globalScore ?? 0;
-    return (
-        <Card tone="brand" className="relative isolate">
-            {/* Decorative circles (inspiration captures 1 and 2). */}
-            <span
-                aria-hidden="true"
-                className="absolute -top-16 -right-16 -z-10 size-56 rounded-full bg-white/10"
-            />
-            <span
-                aria-hidden="true"
-                className="absolute -right-6 -bottom-20 -z-10 size-40 rounded-full bg-white/5"
-            />
-            <CardContent className="flex h-full flex-col gap-4">
-                <div>
-                    <h2 className="flex items-center gap-2 text-lg font-semibold">
-                        <Gauge aria-hidden="true" className="size-5" />
-                        Score global
-                    </h2>
-                    {summary.lastDiagnosticAt && (
-                        <p className="text-sm text-white/85">
-                            Diagnostic du {formatDate(summary.lastDiagnosticAt)}
-                        </p>
-                    )}
-                </div>
-                <div className="flex flex-1 flex-col items-center justify-center gap-3">
-                    <ScoreGauge score={score} />
-                    <span className="rounded-full bg-white/15 px-3 py-1 text-sm font-semibold">
-                        {scoreLevel(score)}
-                    </span>
-                    <Trend
-                        score={score}
-                        previousScore={summary.previousGlobalScore}
-                        className="text-white"
-                    />
-                </div>
-            </CardContent>
-        </Card>
-    );
-}
+// --- Detailed list ----------------------------------------------------------
 
-const BAR_CLASSES: Record<DomainKey, string> = {
-    quality: "bg-quality",
-    hygiene: "bg-hygiene",
-    safety: "bg-safety",
-    environment: "bg-environment",
-};
-
-function DomainTile(score: DomainScore) {
+function DomainRow(score: DomainScore) {
     const { label, icon: Icon } = DOMAINS[score.domain];
     return (
-        <Link
-            href={`/dashboard/${score.domain}`}
-            className="flex flex-col gap-3 rounded-lg border border-border bg-white p-4 transition-colors hover:border-border-strong hover:bg-green-50"
-        >
-            <span className="flex items-center gap-2 text-sm font-medium text-ink">
+        <li>
+            <Link
+                href={`/dashboard/${score.domain}`}
+                className="group flex items-center gap-3 rounded-md px-3 py-2.5 transition-colors hover:bg-green-50"
+            >
                 <Icon
                     aria-hidden="true"
-                    className={cn("size-5", DOMAIN_ICON_CLASSES[score.domain])}
+                    className={cn(
+                        "size-5 shrink-0",
+                        DOMAIN_ICON_CLASSES[score.domain],
+                    )}
                 />
-                {label}
-            </span>
-            <span className="flex items-end justify-between gap-2">
-                <span className="text-3xl font-semibold text-ink">
-                    {score.score}
-                    <span className="sr-only"> sur 100</span>
+                <span className="flex-1 text-sm font-medium text-ink">
+                    {label}
                 </span>
                 <Trend
                     score={score.score}
                     previousScore={score.previousScore}
                 />
-            </span>
-            {/* Decorative: the number above says the same thing. */}
-            <span
-                aria-hidden="true"
-                className="h-1.5 overflow-hidden rounded-full bg-surface-subtle"
-            >
-                <span
-                    className={cn(
-                        "block h-full rounded-full",
-                        BAR_CLASSES[score.domain],
-                    )}
-                    style={{ width: `${score.score}%` }}
+                <span className="w-10 text-right text-lg font-semibold text-ink">
+                    {score.score}
+                    <span className="sr-only"> sur 100</span>
+                </span>
+                <ChevronRight
+                    aria-hidden="true"
+                    className="size-4 text-ink-muted opacity-0 transition-opacity group-hover:opacity-100"
                 />
-            </span>
-        </Link>
+            </Link>
+        </li>
     );
 }
 
-/** Block 1, "Où en suis-je ?": global score and one tile per QHSE domain. */
+/** Block 1, "Où en suis-je ?": rings chart on the left, scores on the right. */
 export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
     if (summary.globalScore === null) {
         return (
@@ -215,17 +235,63 @@ export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
         );
     }
 
+    const globalScore = summary.globalScore;
+
     return (
-        <div className="grid gap-4 lg:grid-cols-[2fr_3fr]">
-            <GlobalScoreCard summary={summary} />
-            <Card>
-                <BlockHeader icon={LayoutGrid} title="Par domaine" />
-                <CardContent className="grid gap-3 sm:grid-cols-2">
-                    {summary.domains.map((score) => (
-                        <DomainTile key={score.domain} {...score} />
-                    ))}
-                </CardContent>
-            </Card>
-        </div>
+        <Card>
+            <BlockHeader
+                icon={Gauge}
+                title="Score QHSE"
+                extra={
+                    summary.lastDiagnosticAt && (
+                        <span className="text-sm font-normal text-ink-muted">
+                            · {formatDate(summary.lastDiagnosticAt)}
+                        </span>
+                    )
+                }
+            />
+            <CardContent className="grid items-center gap-6 md:grid-cols-[auto_1fr] md:gap-10">
+                <div className="flex justify-center">
+                    <ScoreRings
+                        globalScore={globalScore}
+                        domains={summary.domains}
+                    />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                    {/* Global score row: highlighted with the brand gradient. */}
+                    <div className="flex items-center gap-3 rounded-lg bg-brand-gradient px-3 py-3 text-white">
+                        <Gauge aria-hidden="true" className="size-5 shrink-0" />
+                        <span className="flex-1 text-sm font-semibold">
+                            Score global
+                        </span>
+                        <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-semibold">
+                            {scoreLevel(globalScore)}
+                        </span>
+                        <span className="w-10 text-right text-2xl font-semibold">
+                            {globalScore}
+                            <span className="sr-only"> sur 100</span>
+                        </span>
+                        <span className="w-4" aria-hidden="true" />
+                    </div>
+                    {summary.previousGlobalScore !== null && (
+                        <p className="px-3 text-xs text-ink-muted">
+                            {globalScore - summary.previousGlobalScore >= 0
+                                ? "+"
+                                : "−"}
+                            {Math.abs(
+                                globalScore - summary.previousGlobalScore,
+                            )}{" "}
+                            points depuis le diagnostic précédent
+                        </p>
+                    )}
+                    <ul className="flex flex-col">
+                        {summary.domains.map((score) => (
+                            <DomainRow key={score.domain} {...score} />
+                        ))}
+                    </ul>
+                </div>
+            </CardContent>
+        </Card>
     );
 }

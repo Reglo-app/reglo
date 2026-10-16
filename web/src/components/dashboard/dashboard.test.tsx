@@ -20,7 +20,9 @@ describe("ScoreOverview", () => {
         render(<ScoreOverview summary={summary} />);
         expect(screen.getByText("Score global")).toBeInTheDocument();
         expect(
-            screen.getByRole("img", { name: "Score global : 64 sur 100" }),
+            screen.getByRole("img", {
+                name: "Score global : 64 sur 100. Qualité : 72. Hygiène-Santé : 58. Sécurité : 49. Environnement : 77",
+            }),
         ).toBeInTheDocument();
         expect(screen.getByRole("link", { name: /Sécurité/ })).toHaveAttribute(
             "href",
@@ -43,7 +45,7 @@ describe("ScoreOverview", () => {
     it("gives the global score a level in words and its trend", () => {
         render(<ScoreOverview summary={summary} />);
         const hero = screen
-            .getByRole("heading", { name: "Score global" })
+            .getByRole("heading", { name: "Score QHSE" })
             .closest("[data-slot=card]");
         expect(hero).toHaveTextContent("En progrès");
         expect(hero).toHaveTextContent(
