@@ -77,6 +77,8 @@ export type DashboardSummary = {
     generatedAt: string;
     /** Global score from 0 to 100, or null if no diagnostic yet. */
     globalScore: number | null;
+    /** Global score of the previous diagnostic, if any. */
+    previousGlobalScore: number | null;
     domains: DomainScore[];
     /** ISO 8601 date of the last diagnostic, or null if none yet. */
     lastDiagnosticAt: string | null;

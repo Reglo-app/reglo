@@ -19,6 +19,7 @@ export const mockCurrentUser: CurrentUser = {
 export const mockDashboardSummary: DashboardSummary = {
     generatedAt: "2026-10-16T08:00:00.000Z",
     globalScore: 64,
+    previousGlobalScore: 59,
     domains: [
         { domain: "quality", score: 72, previousScore: 65 },
         { domain: "hygiene", score: 58, previousScore: 60 },

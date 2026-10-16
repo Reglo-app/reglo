@@ -81,6 +81,9 @@
         var(--color-teal-700),
         var(--color-brand-green)
     );
+    /* Start under the border too, or a transparent border shows the
+       gradient repeated (a dark line on the right edge). */
+    background-origin: border-box;
 }
 
 @layer base {

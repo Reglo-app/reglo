@@ -33,7 +33,9 @@ export function UserMenu({
     organizationName,
 }: UserMenuProps) {
     return (
-        <DropdownMenu>
+        // Not modal: opening the menu must not lock the page scroll (that
+        // hid the scrollbar and shifted the layout).
+        <DropdownMenu modal={false}>
             {/* Round avatar and chevron only; name, role and organization
                 are in the menu. */}
             <DropdownMenuTrigger

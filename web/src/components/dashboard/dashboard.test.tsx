@@ -6,7 +6,10 @@ import {
     NewsCard,
     UpcomingActionsCard,
 } from "@/components/dashboard/dashboard-lists";
-import { ScoreOverview } from "@/components/dashboard/score-overview";
+import {
+    ScoreOverview,
+    scoreLevel,
+} from "@/components/dashboard/score-overview";
 import { mockDashboardSummary } from "@/lib/api/mocks";
 
 const summary = mockDashboardSummary;
@@ -35,6 +38,23 @@ describe("ScoreOverview", () => {
         expect(
             screen.getByRole("link", { name: /Sécurité/ }),
         ).toHaveTextContent("Premier diagnostic");
+    });
+
+    it("gives the global score a level in words and its trend", () => {
+        render(<ScoreOverview summary={summary} />);
+        const hero = screen
+            .getByRole("heading", { name: "Score global" })
+            .closest("[data-slot=card]");
+        expect(hero).toHaveTextContent("En progrès");
+        expect(hero).toHaveTextContent(
+            "+5 points depuis le diagnostic précédent",
+        );
+    });
+
+    it("maps scores to levels", () => {
+        expect(scoreLevel(30)).toBe("À renforcer");
+        expect(scoreLevel(50)).toBe("En progrès");
+        expect(scoreLevel(75)).toBe("Maîtrisé");
     });
 
     it("asks for a first diagnostic when there is no score", () => {
