@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { DOMAIN_ICON_CLASSES } from "@/lib/domains";
 import {
     HOME_ITEM,
-    NAV_ITEMS,
+    NAV_SECTIONS,
     SETTINGS_ITEM,
     findNavEntry,
     type NavItem,
@@ -139,16 +139,32 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                 className="flex min-h-0 flex-1 flex-col"
             >
                 {/* Only the sections scroll; Paramètres stays at the bottom. */}
-                <ul className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-3">
-                    {NAV_ITEMS.map((item) => (
-                        <NavBranch
-                            key={item.href}
-                            item={item}
-                            collapsed={collapsed}
-                            onNavigate={onNavigate}
-                        />
+                <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-3">
+                    {NAV_SECTIONS.map((section, index) => (
+                        <div key={section.title ?? index}>
+                            {section.title && (
+                                <p
+                                    className={cn(
+                                        "px-3 pb-1.5 text-xs font-medium tracking-wide text-ink-muted uppercase",
+                                        collapsed && "sr-only",
+                                    )}
+                                >
+                                    {section.title}
+                                </p>
+                            )}
+                            <ul className="flex flex-col gap-1">
+                                {section.items.map((item) => (
+                                    <NavBranch
+                                        key={item.href}
+                                        item={item}
+                                        collapsed={collapsed}
+                                        onNavigate={onNavigate}
+                                    />
+                                ))}
+                            </ul>
+                        </div>
                     ))}
-                </ul>
+                </div>
 
                 <ul className="mx-3 mt-2 flex flex-col gap-1 border-t border-border pt-2">
                     <NavBranch

@@ -3,7 +3,6 @@ import {
     GraduationCap,
     LayoutDashboard,
     ListChecks,
-    Newspaper,
     Settings,
     type LucideIcon,
 } from "lucide-react";
@@ -30,23 +29,40 @@ export const HOME_ITEM: NavItem = {
     href: "/dashboard",
     label: "Tableau de bord",
     icon: LayoutDashboard,
-    children: [{ href: "/diagnostic", label: "Diagnostic" }],
+    children: [
+        { href: "/diagnostic", label: "Diagnostic" },
+        { href: "/news", label: "Veille réglementaire" },
+    ],
 };
 
-/** Main navigation, in sidebar order (Paramètres is pinned at the bottom). */
-export const NAV_ITEMS: NavItem[] = [
-    HOME_ITEM,
-    ...DOMAIN_KEYS.map((key) => ({
-        href: `/dashboard/${key}`,
-        label: DOMAINS[key].label,
-        icon: DOMAINS[key].icon,
-        domain: key,
-    })),
-    { href: "/actions", label: "Plan d'actions", icon: ListChecks },
-    { href: "/documents", label: "Justificatifs", icon: FileCheck },
-    { href: "/trainings", label: "Formations", icon: GraduationCap },
-    { href: "/news", label: "Veille réglementaire", icon: Newspaper },
+export type NavSection = {
+    /** Small title above the section; none for the first one. */
+    title?: string;
+    items: NavItem[];
+};
+
+/** Sidebar sections, in order (Paramètres is pinned at the bottom). */
+export const NAV_SECTIONS: NavSection[] = [
+    {
+        items: [
+            HOME_ITEM,
+            { href: "/actions", label: "Plan d'actions", icon: ListChecks },
+            { href: "/documents", label: "Justificatifs", icon: FileCheck },
+            { href: "/trainings", label: "Formations", icon: GraduationCap },
+        ],
+    },
+    {
+        title: "Domaines QHSE",
+        items: DOMAIN_KEYS.map((key) => ({
+            href: `/dashboard/${key}`,
+            label: DOMAINS[key].label,
+            icon: DOMAINS[key].icon,
+            domain: key,
+        })),
+    },
 ];
+
+export const NAV_ITEMS: NavItem[] = NAV_SECTIONS.flatMap((s) => s.items);
 
 export const SETTINGS_ITEM: NavItem = {
     href: "/settings",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { Suspense } from "react";
 
 import {
@@ -26,15 +27,15 @@ async function DashboardContent() {
     return (
         <div className="flex flex-col gap-4">
             <ScoreOverview summary={summary} />
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid gap-4 xl:grid-cols-3">
                 <AlertsCard alerts={summary.alerts} today={today} />
                 <UpcomingActionsCard
                     actions={summary.upcomingActions}
                     onTimeRate={summary.actionsOnTimeRate}
                     today={today}
                 />
+                <NewsCard news={summary.latestNews} />
             </div>
-            <NewsCard news={summary.latestNews} />
         </div>
     );
 }
@@ -43,12 +44,12 @@ function DashboardSkeleton() {
     return (
         <div className="flex flex-col gap-4" aria-busy="true">
             <span className="sr-only">Chargement…</span>
-            <Skeleton className="h-56 rounded-lg" />
-            <div className="grid gap-4 lg:grid-cols-2">
-                <Skeleton className="h-72 rounded-lg" />
-                <Skeleton className="h-72 rounded-lg" />
-            </div>
             <Skeleton className="h-44 rounded-lg" />
+            <div className="grid gap-4 xl:grid-cols-3">
+                <Skeleton className="h-64 rounded-lg" />
+                <Skeleton className="h-64 rounded-lg" />
+                <Skeleton className="h-64 rounded-lg" />
+            </div>
         </div>
     );
 }
@@ -61,7 +62,10 @@ export default function DashboardPage() {
                 description="Votre situation sur les quatre domaines QHSE."
                 action={
                     <Button asChild>
-                        <Link href="/diagnostic">Faire un diagnostic</Link>
+                        <Link href="/diagnostic">
+                            <Plus aria-hidden="true" />
+                            Faire un diagnostic
+                        </Link>
                     </Button>
                 }
             />

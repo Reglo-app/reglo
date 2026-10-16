@@ -59,13 +59,14 @@ describe("SidebarNav", () => {
     it("keeps accessible labels when collapsed", () => {
         render(<SidebarNav collapsed />);
         expect(
-            screen.getByRole("link", { name: "Veille réglementaire" }),
+            screen.getByRole("link", { name: "Formations" }),
         ).toBeInTheDocument();
     });
 
-    it("has no group titles", () => {
+    it("titles only the QHSE pillars section", () => {
         render(<SidebarNav />);
-        for (const title of ["Pilotage", "Domaines QHSE", "Ressources"]) {
+        expect(screen.getByText("Domaines QHSE")).toBeInTheDocument();
+        for (const title of ["Pilotage", "Ressources"]) {
             expect(screen.queryByText(title)).not.toBeInTheDocument();
         }
     });

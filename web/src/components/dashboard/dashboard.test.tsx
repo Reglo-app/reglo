@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -28,7 +28,7 @@ describe("ScoreOverview", () => {
         render(<ScoreOverview summary={summary} />);
         const quality = screen.getByRole("link", { name: /Qualité/ });
         expect(quality).toHaveTextContent(
-            "+7 pts depuis le diagnostic précédent",
+            "+7 points depuis le diagnostic précédent",
         );
         expect(
             screen.getByRole("link", { name: /Sécurité/ }),
@@ -69,7 +69,7 @@ describe("AlertsCard", () => {
 
     it("has a reassuring empty state", () => {
         render(<AlertsCard alerts={[]} today={today} />);
-        expect(screen.getByText(/tout est à jour/)).toBeInTheDocument();
+        expect(screen.getByText("Rien d'urgent.")).toBeInTheDocument();
     });
 });
 
@@ -82,11 +82,10 @@ describe("UpcomingActionsCard", () => {
                 today={today}
             />,
         );
-        expect(
-            screen.getByText(/des actions clôturées dans les délais/),
-        ).toHaveTextContent("78 %");
+        expect(screen.getByText("78 % à l'heure")).toBeInTheDocument();
         const first = screen.getAllByRole("listitem")[0];
-        expect(within(first).getByText("Camille Martin")).toBeInTheDocument();
+        expect(first).toHaveTextContent("Planifier l'audit interne ISO 9001");
+        expect(first).toHaveTextContent("Qualité");
         expect(first).toHaveTextContent("Dans 4 jours");
     });
 });

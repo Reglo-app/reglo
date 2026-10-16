@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
     HOME_ITEM,
     NAV_ITEMS,
+    NAV_SECTIONS,
     findNavEntry,
     findNavItem,
     getBreadcrumb,
@@ -19,9 +20,24 @@ describe("isActive", () => {
 });
 
 describe("navigation tree", () => {
-    it("puts Diagnostic under Tableau de bord, not at the top level", () => {
-        expect(HOME_ITEM.children?.map((c) => c.label)).toEqual(["Diagnostic"]);
-        expect(NAV_ITEMS.map((item) => item.label)).not.toContain("Diagnostic");
+    it("puts Diagnostic and Veille réglementaire under Tableau de bord", () => {
+        expect(HOME_ITEM.children?.map((c) => c.label)).toEqual([
+            "Diagnostic",
+            "Veille réglementaire",
+        ]);
+        const topLevel = NAV_ITEMS.map((item) => item.label);
+        expect(topLevel).not.toContain("Diagnostic");
+        expect(topLevel).not.toContain("Veille réglementaire");
+    });
+
+    it("groups the four pillars in a titled section", () => {
+        const pillars = NAV_SECTIONS.find((s) => s.title === "Domaines QHSE");
+        expect(pillars?.items.map((item) => item.domain)).toEqual([
+            "quality",
+            "hygiene",
+            "safety",
+            "environment",
+        ]);
     });
 
     it("maps a sub-page to its parent branch", () => {
@@ -57,6 +73,10 @@ describe("getBreadcrumb", () => {
         expect(getBreadcrumb("/diagnostic").map((c) => c.label)).toEqual([
             "Tableau de bord",
             "Diagnostic",
+        ]);
+        expect(getBreadcrumb("/news").map((c) => c.label)).toEqual([
+            "Tableau de bord",
+            "Veille réglementaire",
         ]);
     });
 

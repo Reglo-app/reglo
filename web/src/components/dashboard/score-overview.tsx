@@ -1,35 +1,43 @@
 import Link from "next/link";
-import { ArrowRight, ClipboardCheck } from "lucide-react";
+import {
+    ClipboardCheck,
+    Gauge,
+    Minus,
+    TrendingDown,
+    TrendingUp,
+} from "lucide-react";
 
+import { BlockHeader } from "@/components/dashboard/block";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import type { DashboardSummary, DomainScore } from "@/lib/api";
 import { DOMAIN_ICON_CLASSES, DOMAINS } from "@/lib/domains";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
+/** Change since the previous diagnostic: arrow + number, words for screen readers. */
 function Trend({ score, previousScore }: DomainScore) {
     if (previousScore === null) {
-        return (
-            <span className="text-xs text-ink-muted">Premier diagnostic</span>
-        );
+        return <span className="sr-only">Premier diagnostic</span>;
     }
     const delta = score - previousScore;
-    const label =
-        delta === 0
-            ? "Stable"
-            : `${delta > 0 ? "+" : "−"}${Math.abs(delta)} pts`;
+    const Icon = delta > 0 ? TrendingUp : delta < 0 ? TrendingDown : Minus;
     return (
         <span
             className={cn(
-                "text-xs font-medium",
+                "flex items-center gap-1 text-sm font-medium",
                 delta > 0 && "text-green-700",
                 delta < 0 && "text-danger-700",
                 delta === 0 && "text-ink-muted",
             )}
         >
-            {label}
-            <span className="sr-only"> depuis le diagnostic précédent</span>
+            <Icon aria-hidden="true" className="size-4" />
+            {delta > 0 ? "+" : delta < 0 ? "−" : ""}
+            {Math.abs(delta)}
+            <span className="sr-only">
+                {" "}
+                points depuis le diagnostic précédent
+            </span>
         </span>
     );
 }
@@ -39,7 +47,7 @@ function DomainTile(score: DomainScore) {
     return (
         <Link
             href={`/dashboard/${score.domain}`}
-            className="group flex flex-col gap-3 rounded-lg border border-border bg-white p-4 transition-colors hover:border-border-strong hover:bg-green-50"
+            className="flex flex-col gap-2 rounded-lg border border-border bg-white p-4 transition-colors hover:border-border-strong hover:bg-green-50"
         >
             <span className="flex items-center gap-2 text-sm font-medium text-ink">
                 <Icon
@@ -47,18 +55,14 @@ function DomainTile(score: DomainScore) {
                     className={cn("size-5", DOMAIN_ICON_CLASSES[score.domain])}
                 />
                 {label}
-                <ArrowRight
-                    aria-hidden="true"
-                    className="ml-auto size-4 text-ink-muted opacity-0 transition-opacity group-hover:opacity-100"
-                />
             </span>
-            <span className="flex items-baseline gap-1">
+            <span className="flex items-end justify-between gap-2">
                 <span className="text-3xl font-semibold text-ink">
                     {score.score}
+                    <span className="sr-only"> sur 100</span>
                 </span>
-                <span className="text-sm text-ink-muted">/ 100</span>
+                <Trend {...score} />
             </span>
-            <Trend {...score} />
         </Link>
     );
 }
@@ -69,16 +73,10 @@ export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
         return (
             <Card tone="brand">
                 <CardContent className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                    <ClipboardCheck aria-hidden="true" className="size-10" />
-                    <div className="flex-1">
-                        <h2 className="text-lg font-semibold">
-                            Faites votre premier diagnostic
-                        </h2>
-                        <p className="text-sm text-white/80">
-                            Une vingtaine de minutes pour obtenir votre score
-                            sur les quatre domaines QHSE.
-                        </p>
-                    </div>
+                    <ClipboardCheck aria-hidden="true" className="size-8" />
+                    <h2 className="flex-1 text-lg font-semibold">
+                        Faites votre premier diagnostic
+                    </h2>
                     <Button asChild variant="highlight">
                         <Link href="/diagnostic">Commencer</Link>
                     </Button>
@@ -89,31 +87,28 @@ export function ScoreOverview({ summary }: { summary: DashboardSummary }) {
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>
-                    <h2>Score QHSE</h2>
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-4 lg:grid-cols-[200px_1fr]">
-                <div className="flex flex-col justify-center gap-1 rounded-lg bg-brand-teal p-5 text-white">
-                    <span className="text-sm text-white/80">Score global</span>
-                    <span className="flex items-baseline gap-1">
-                        <span className="text-5xl font-semibold">
-                            {summary.globalScore}
+            <BlockHeader
+                icon={Gauge}
+                title="Score QHSE"
+                extra={
+                    summary.lastDiagnosticAt && (
+                        <span className="text-sm font-normal text-ink-muted">
+                            · {formatDate(summary.lastDiagnosticAt)}
                         </span>
-                        <span className="text-white/80">/ 100</span>
+                    )
+                }
+            />
+            <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                <div className="flex flex-col justify-between gap-2 rounded-lg bg-brand-teal p-4 text-white sm:col-span-2 lg:col-span-1">
+                    <span className="text-sm">Score global</span>
+                    <span className="text-4xl font-semibold">
+                        {summary.globalScore}
+                        <span className="sr-only"> sur 100</span>
                     </span>
-                    {summary.lastDiagnosticAt && (
-                        <span className="text-xs text-white/80">
-                            Diagnostic du {formatDate(summary.lastDiagnosticAt)}
-                        </span>
-                    )}
                 </div>
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                    {summary.domains.map((score) => (
-                        <DomainTile key={score.domain} {...score} />
-                    ))}
-                </div>
+                {summary.domains.map((score) => (
+                    <DomainTile key={score.domain} {...score} />
+                ))}
             </CardContent>
         </Card>
     );
